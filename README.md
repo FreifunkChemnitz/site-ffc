@@ -1,2 +1,2 @@
 # site-ffc
-Gluon Site of Freifunk Chemnitz
+Gluon Site of Freifunk Vogtland

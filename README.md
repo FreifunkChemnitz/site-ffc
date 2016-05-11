@@ -1,2 +1,2 @@
-# site-ffc
+# site-ffv
 Gluon Site of Freifunk Vogtland

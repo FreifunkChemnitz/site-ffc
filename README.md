@@ -1,2 +1,26 @@
 # site-ffv
 Gluon Site of Freifunk Vogtland
+
+
+## building images from releases
+
+    # configure build specific settings
+    GLUON_VERSION="2016.1.4"
+    SIGN_KEYDIR="/opt/freifunk/signkeys_ffv"
+    MANIFEST_KEY="manifest_key"
+    SITE_TAG=b20160515
+    TARGET_BRANCH=experimental
+    GLUONDIR="gluon-ffv-${TARGET_BRANCH}"
+    
+    # set gluon env variables
+    export GLUON_OPKG_KEY="${SIGN_KEYDIR}/gluon-opkg-key"
+    export GLUON_RELEASE="${SITE_TAG}"
+    
+    # build
+    git clone https://github.com/freifunk-gluon/gluon.git "${GLUONDIR}" -b v"${GLUON_VERSION}"
+    git clone https://github.com/FreifunkVogtland/site-ffv.git "${GLUONDIR}"/site -b "${SITE_TAG}"
+    make -C "${GLUONDIR}" update
+    make -C "${GLUONDIR}" GLUON_TARGET=ar71xx-generic clean
+    make -C "${GLUONDIR}" GLUON_TARGET=ar71xx-generic GLUON_BRANCH="${TARGET_BRANCH}"
+    make -C "${GLUONDIR}" GLUON_BRANCH="${TARGET_BRANCH}" manifest
+    "${GLUONDIR}"/contrib/sign.sh "${SIGN_KEYDIR}/${MANIFEST_KEY}" "${GLUONDIR}"/output/images/sysupgrade/"${TARGET_BRANCH}".manifest

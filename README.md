@@ -1,6 +1,9 @@
 # site-ffv
 Gluon Site of Freifunk Vogtland
 
+## Prebuild images
+
+Already build images can be downloaded at http://firmware.freifunk-vogtland.net/firmware/
 
 ## building images from releases
 

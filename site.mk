@@ -25,7 +25,7 @@ GLUON_SITE_PACKAGES := \
 	iptables \
 	haveged
 
-DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')
+DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')-v
 
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 

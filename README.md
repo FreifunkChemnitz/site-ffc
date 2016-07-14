@@ -19,11 +19,24 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     export GLUON_OPKG_KEY="${SIGN_KEYDIR}/gluon-opkg-key"
     export GLUON_RELEASE="${SITE_TAG}"
     
+    TARGETS="\
+        ar71xx-generic \
+        ar71xx-nand \
+        mpc85xx-generic \
+        x86-generic \
+        x86-kvm_guest \
+        x86-64 \
+        x86-xen_domu \
+    "
+    
     # build
     git clone https://github.com/freifunk-gluon/gluon.git "${GLUONDIR}" -b v"${GLUON_VERSION}"
     git clone https://github.com/FreifunkVogtland/site-ffv.git "${GLUONDIR}"/site -b "${SITE_TAG}"
     make -C "${GLUONDIR}" update
-    make -C "${GLUONDIR}" GLUON_TARGET=ar71xx-generic clean -j"$(nproc || echo 1)"
-    make -C "${GLUONDIR}" GLUON_TARGET=ar71xx-generic GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"
+    for target in ${TARGETS}; do
+        make -C "${GLUONDIR}" GLUON_TARGET="${target}" clean -j"$(nproc || echo 1)"
+        make -C "${GLUONDIR}" GLUON_TARGET="${target}" GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"
+    done
+    
     make -C "${GLUONDIR}" GLUON_BRANCH="${TARGET_BRANCH}" manifest
     "${GLUONDIR}"/contrib/sign.sh "${SIGN_KEYDIR}/${MANIFEST_KEY}" "${GLUONDIR}"/output/images/sysupgrade/"${TARGET_BRANCH}".manifest

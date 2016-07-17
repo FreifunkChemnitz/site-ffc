@@ -22,6 +22,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
 	gluon-status-page \
+	ffffm-ath9k-broken-wifi-workaround \
 	iwinfo \
 	iptables \
 	haveged

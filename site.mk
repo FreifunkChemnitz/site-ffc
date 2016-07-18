@@ -19,6 +19,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
 	gluon-status-page \
+	gluon-luci-wifi-config \
 	iwinfo \
 	iptables \
 	haveged

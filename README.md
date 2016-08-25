@@ -27,6 +27,10 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
         x86-kvm_guest \
         x86-64 \
         x86-xen_domu \
+        ramips-rt305x \
+        brcm2708-bcm2708 \
+        brcm2708-bcm2709 \
+        sunxi \
     "
     
     # build
@@ -34,8 +38,8 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     git clone https://github.com/FreifunkVogtland/site-ffv.git "${GLUONDIR}"/site -b "${SITE_TAG}"
     make -C "${GLUONDIR}" update
     for target in ${TARGETS}; do
-        make -C "${GLUONDIR}" GLUON_TARGET="${target}" clean -j"$(nproc || echo 1)"
-        make -C "${GLUONDIR}" GLUON_TARGET="${target}" GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"
+        make -C "${GLUONDIR}" GLUON_TARGET="${target}" BROKEN=1 clean -j"$(nproc || echo 1)"
+        make -C "${GLUONDIR}" GLUON_TARGET="${target}" BROKEN=1 GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"
     done
     
     make -C "${GLUONDIR}" GLUON_BRANCH="${TARGET_BRANCH}" manifest

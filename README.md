@@ -8,7 +8,7 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
 ## building images from releases
 
     # configure build specific settings
-    GLUON_VERSION="2016.1.5"
+    GLUON_VERSION="2016.1.5-1"
     SIGN_KEYDIR="/opt/freifunk/signkeys_ffv"
     MANIFEST_KEY="manifest_key"
     SITE_TAG=b20160717-v
@@ -30,7 +30,7 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     "
     
     # build
-    git clone https://github.com/freifunk-gluon/gluon.git "${GLUONDIR}" -b v"${GLUON_VERSION}"
+    git clone https://github.com/FreifunkVogtland/gluon.git "${GLUONDIR}" -b v"${GLUON_VERSION}"
     git clone https://github.com/FreifunkVogtland/site-ffv.git "${GLUONDIR}"/site -b "${SITE_TAG}"
     make -C "${GLUONDIR}" update
     for target in ${TARGETS}; do

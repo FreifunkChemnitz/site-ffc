@@ -1,10 +1,11 @@
 language: c
+cache: ccache
 env:
   - GLUON_TARGET=ar71xx-generic
 install:
   - git clone -b v2016.1.6 https://github.com/freifunk-gluon/gluon.git
-  - git clone https://github.com/FreifunkChemnitz/site-ffc gluon/site
+  - ln -s .. gluon/site
 script: 
  -  cd gluon
- -  make update
- -  make -j3 prepare
+ -  make V=s update
+ -  make V=s -j3 prepare

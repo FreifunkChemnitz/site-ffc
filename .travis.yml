@@ -1,7 +1,9 @@
-language: bash
-sudo: false
+language: c
+env:
+  - GLUON_TARGET=ar71xx-generic
+  - GLUON_BRANCH="experimental"
 install:
-  - git clone -b v2015.1.6 https://github.com/freifunk-gluon/gluon gluon
+  - git clone -b v2016.1.6 https://github.com/freifunk-gluon/gluon.git
   - git clone https://github.com/FreifunkChemnitz/site-ffc gluon/site
 script: 
  -  cd gluon

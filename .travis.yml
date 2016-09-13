@@ -7,4 +7,4 @@ install:
 script: 
  -  cd gluon
  -  make update
- -  make prepare
+ -  make -j3 prepare

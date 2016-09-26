@@ -42,5 +42,5 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
         make -C "${GLUONDIR}" GLUON_TARGET="${target}" BROKEN=1 GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"
     done
     
-    make -C "${GLUONDIR}" GLUON_BRANCH="${TARGET_BRANCH}" manifest
+    make -C "${GLUONDIR}" GLUON_BRANCH="${TARGET_BRANCH}" BROKEN=1 manifest
     "${GLUONDIR}"/contrib/sign.sh "${SIGN_KEYDIR}/${MANIFEST_KEY}" "${GLUONDIR}"/output/images/sysupgrade/"${TARGET_BRANCH}".manifest

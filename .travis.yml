@@ -2,7 +2,6 @@ language: c
 cache: ccache
 env:
   - GLUON_TARGET=ar71xx-generic
-  - GLUON_BRANCH=experimental
 install:
   - git clone -b v2016.2 https://github.com/freifunk-gluon/gluon.git
   - git clone https://github.com/FreifunkChemnitz/site-ffc gluon/site

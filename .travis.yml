@@ -7,4 +7,5 @@ install:
   - git clone https://github.com/FreifunkChemnitz/site-ffc gluon/site
 script: 
  -  cd gluon
+ -  make -j5 update
  -  make -j5 prepare

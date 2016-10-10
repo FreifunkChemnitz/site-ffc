@@ -27,6 +27,20 @@ GLUON_SITE_PACKAGES := \
 	iptables \
 	haveged
 
+ifeq ($(GLUON_TARGET),x86-generic)
+GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb2 \
+    kmod-usb-hid
+endif
+
+ifeq ($(GLUON_TARGET),x86-64)
+GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb2 \
+    kmod-usb-hid
+endif
+
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')-v
 
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
@@ -34,3 +48,5 @@ GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 GLUON_PRIORITY ?= 7
 
 GLUON_LANGS ?= de
+GLUON_REGION = eu
+GLUON_ATH10K_MESH = 11s

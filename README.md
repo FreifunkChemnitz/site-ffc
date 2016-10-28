@@ -22,14 +22,17 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     TARGETS="\
         ar71xx-generic \
         ar71xx-nand \
+        brcm2708-bcm2708 \
+        brcm2708-bcm2709 \
         mpc85xx-generic \
         x86-generic \
         x86-kvm_guest \
         x86-64 \
         x86-xen_domu \
+        \
+        ar71xx-mikrotik \
+        ramips-mt7621 \
         ramips-rt305x \
-        brcm2708-bcm2708 \
-        brcm2708-bcm2709 \
         sunxi \
     "
     

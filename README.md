@@ -8,10 +8,10 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
 ## building images from releases
 
     # configure build specific settings
-    GLUON_VERSION="2016.1.6-2"
+    GLUON_VERSION="2016.2.1-2"
     SIGN_KEYDIR="/opt/freifunk/signkeys_ffv"
     MANIFEST_KEY="manifest_key"
-    SITE_TAG=b20161010-v
+    SITE_TAG=b20161202-v
     TARGET_BRANCH=stable
     GLUONDIR="gluon-ffv-${TARGET_BRANCH}"
     
@@ -22,6 +22,8 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     TARGETS="\
         ar71xx-generic \
         ar71xx-nand \
+        brcm2708-bcm2708 \
+        brcm2708-bcm2709 \
         mpc85xx-generic \
         x86-generic \
         x86-kvm_guest \

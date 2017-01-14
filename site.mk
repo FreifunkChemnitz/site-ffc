@@ -21,6 +21,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-next-node \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
+	gluon-ssid-changer \
 	gluon-status-page \
 	ffffm-ath9k-broken-wifi-workaround \
 	iwinfo \

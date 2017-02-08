@@ -25,6 +25,7 @@ GLUON_SITE_PACKAGES := \
 	iptables \
 	haveged
 
+<<<<<<< HEAD
 ifeq ($(GLUON_TARGET),x86-generic)
 GLUON_SITE_PACKAGES += \
     kmod-usb-core \
@@ -40,7 +41,6 @@ GLUON_SITE_PACKAGES += \
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')floe
-
 
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
 

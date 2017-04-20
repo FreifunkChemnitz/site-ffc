@@ -12,6 +12,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-config-mode-mesh-vpn \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
+	gluon-ebtables-segment-mld \
 	gluon-authorized-keys \
 	gluon-luci-admin \
 	gluon-luci-autoupdater \
@@ -21,7 +22,9 @@ GLUON_SITE_PACKAGES := \
 	gluon-next-node \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
+	gluon-ssid-changer \
 	gluon-status-page \
+	respondd-module-airtime \
 	ffffm-ath9k-broken-wifi-workaround \
 	iwinfo \
 	iptables \

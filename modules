@@ -3,8 +3,11 @@
 #
 # In most cases, it is not required so don't add it.
 
-GLUON_SITE_FEEDS='ffffm_packages'
+GLUON_SITE_FEEDS='ffffm_packages gluon_ssid_changer'
 
 
 PACKAGES_FFFFM_PACKAGES_REPO=https://github.com/FreifunkVogtland/ffffm-packages.git
 PACKAGES_FFFFM_PACKAGES_COMMIT=7ed7d9c01d0631321903fd3f88fe48c17b9b1c61
+
+PACKAGES_GLUON_SSID_CHANGER_REPO=https://github.com/FreifunkVogtland/gluon-ssid-changer.git
+PACKAGES_GLUON_SSID_CHANGER_COMMIT=7de5b160dd688003750bb8b2411024d5a4b7c2ca

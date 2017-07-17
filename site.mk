@@ -14,12 +14,10 @@ GLUON_SITE_PACKAGES := \
 	gluon-ebtables-filter-ra-dhcp \
 	gluon-ebtables-segment-mld \
 	gluon-authorized-keys \
-	gluon-luci-admin \
-	gluon-luci-autoupdater \
-	gluon-luci-portconfig \
-	gluon-luci-private-wifi \
-	gluon-luci-wifi-config \
-	gluon-next-node \
+	gluon-web-admin \
+	gluon-web-autoupdater \
+	gluon-web-private-wifi \
+	gluon-web-wifi-config \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
 	gluon-ssid-changer \
@@ -38,6 +36,13 @@ GLUON_SITE_PACKAGES += \
 endif
 
 ifeq ($(GLUON_TARGET),x86-64)
+GLUON_SITE_PACKAGES += \
+    kmod-usb-core \
+    kmod-usb2 \
+    kmod-usb-hid
+endif
+
+ifeq ($(GLUON_TARGET),x86-geode)
 GLUON_SITE_PACKAGES += \
     kmod-usb-core \
     kmod-usb2 \

@@ -8,7 +8,7 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
 ## building images from releases
 
     # configure build specific settings
-    GLUON_VERSION="2016.2.6-1"
+    GLUON_VERSION="2017.1.1-1"
     SIGN_KEYDIR="/opt/freifunk/signkeys_ffv"
     MANIFEST_KEY="manifest_key"
     SITE_TAG=b20170705-v
@@ -21,17 +21,20 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     
     TARGETS="\
         ar71xx-generic \
+        ar71xx-tiny-generic \
         ar71xx-nand \
         brcm2708-bcm2708 \
         brcm2708-bcm2709 \
         mpc85xx-generic \
         x86-generic \
-        x86-kvm_guest \
+        x86-geode \
         x86-64 \
-        x86-xen_domu \
         \
         ar71xx-mikrotik \
+        ipq806x \
+        mvebu \
         ramips-mt7621 \
+        ramips-mt7628 \
         ramips-rt305x \
         sunxi \
     "

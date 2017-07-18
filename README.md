@@ -21,7 +21,7 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     
     TARGETS="\
         ar71xx-generic \
-        ar71xx-tiny-generic \
+        ar71xx-tiny \
         ar71xx-nand \
         brcm2708-bcm2708 \
         brcm2708-bcm2709 \

@@ -16,6 +16,7 @@ GLUON_SITE_PACKAGES := \
 	gluon-authorized-keys \
 	gluon-web-admin \
 	gluon-web-autoupdater \
+	gluon-web-network \
 	gluon-web-private-wifi \
 	gluon-web-wifi-config \
 	gluon-mesh-vpn-fastd \

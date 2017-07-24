@@ -12,12 +12,9 @@ GLUON_SITE_PACKAGES := \
 	gluon-ebtables-filter-multicast \
 	gluon-ebtables-filter-ra-dhcp \
 	gluon-authorized-keys \
-	gluon-luci-admin \
-	gluon-luci-autoupdater \
-	gluon-luci-portconfig \
-	gluon-luci-wifi-config \
-	gluon-luci-private-wifi \
-	gluon-next-node \
+	gluon-web-admin \
+	gluon-web-autoupdater \
+	gluon-web-wifi-config \
 	gluon-mesh-vpn-fastd \
 	gluon-radvd \
 	gluon-status-page \
@@ -25,7 +22,6 @@ GLUON_SITE_PACKAGES := \
 	iptables \
 	haveged
 
-<<<<<<< HEAD
 ifeq ($(GLUON_TARGET),x86-generic)
 GLUON_SITE_PACKAGES += \
     kmod-usb-core \

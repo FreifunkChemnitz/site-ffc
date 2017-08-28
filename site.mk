@@ -25,9 +25,19 @@ GLUON_SITE_PACKAGES := \
 
 ifneq ($(GLUON_TARGET),ar71xx-tiny)
 GLUON_SITE_PACKAGES += \
-        kmod-usb-core \
+	comgt \
+	ppp \
+	kmod-fs-ext4 \
+	kmod-nls-utf8 \
         kmod-usb2 \
         kmod-usb-hid \
+	kmod-usb-net \
+	kmod-usb-net-asix \
+	kmod-usb-net-cdc-ether \
+	kmod-usb-serial \
+	kmod-usb-serial-option \
+	kmod-usb-serial-wwan \
+	kmod-usb-storage
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')

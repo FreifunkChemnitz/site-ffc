@@ -23,7 +23,15 @@ GLUON_SITE_PACKAGES := \
         iptables \
         haveged
 
-ifneq ($(GLUON_TARGET),ar71xx-tiny)
+FLASH_4MB := false
+ifeq ($(GLUON_TARGET),ar71xx-tiny)
+       FLASH_4MB := true
+endif
+ifeq ($(GLUON_TARGET),ramips-rt305x)
+       FLASH_4MB := true
+endif
+
+ifeq ($(FLASH_4MB),false)
 GLUON_SITE_PACKAGES += \
 	comgt \
 	ppp \

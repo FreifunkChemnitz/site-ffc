@@ -48,6 +48,11 @@ GLUON_SITE_PACKAGES += \
 	kmod-usb-storage
 endif
 
+ifeq ($(GLUON_TARGET),x86-64)
+GLUON_SITE_PACKAGES += \
+	qemu-ga
+endif
+
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')
 
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)

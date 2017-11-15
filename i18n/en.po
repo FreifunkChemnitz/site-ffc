@@ -1,0 +1,15 @@
+msgid "gluon-web-node-role:role:node"
+msgstr ""
+"normal Freifunk node"
+
+msgid "gluon-web-node-role:role:temporary"
+msgstr ""
+"temporary node for tests or events"
+
+msgid "gluon-web-node-role:role:backbone"
+msgstr ""
+"mesh only node / no client network"
+
+msgid "gluon-web-node-role:role:service"
+msgstr ""
+"service (offloader, node & access point separated, …)"

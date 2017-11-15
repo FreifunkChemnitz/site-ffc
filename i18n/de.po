@@ -30,3 +30,19 @@ msgstr ""
 "Betrieb für drei Sekunden den Reset-Button. Das Gerät wird dann im Config "
 "Mode neustarten.</p>"
 "<p>Viel Spaß mit deinem Knoten und der Erkundung von Freifunk!</p>"
+
+msgid "gluon-web-node-role:role:node"
+msgstr ""
+"normaler Freifunk Knoten"
+
+msgid "gluon-web-node-role:role:temporary"
+msgstr ""
+"Knoten für Tests oder Events"
+
+msgid "gluon-web-node-role:role:backbone"
+msgstr ""
+"reiner Mesh-Knoten"
+
+msgid "gluon-web-node-role:role:service"
+msgstr ""
+"Service (Offloader, Knoten & AccessPoint getrennt, …)"

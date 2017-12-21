@@ -50,3 +50,15 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     
     make -C "${GLUONDIR}" GLUON_BRANCH="${TARGET_BRANCH}" BROKEN=1 manifest
     "${GLUONDIR}"/contrib/sign.sh "${SIGN_KEYDIR}/${MANIFEST_KEY}" "${GLUONDIR}"/output/images/sysupgrade/"${TARGET_BRANCH}".manifest
+
+## building single images
+
+The actual name of the device and its target has to be has to be found. All
+the targets are listed in `targets/` and devices are listed in each file.
+For example `tp-link-tl-wr1043n-nd-v1` can be found in
+`targets/ar71xx-generic`.
+
+Most steps as shown above has to be used. But everything after
+`make -C "${GLUONDIR}" update` has to be replaced with:
+
+    make -C "${GLUONDIR}" GLUON_TARGET=ar71xx-generic DEVICES="tp-link-tl-wr1043n-nd-v1" GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"

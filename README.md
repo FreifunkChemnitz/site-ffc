@@ -44,7 +44,6 @@ Already build images can be downloaded at http://firmware.freifunk-vogtland.net/
     git clone https://github.com/FreifunkVogtland/site-ffv.git "${GLUONDIR}"/site -b "${SITE_TAG}"
     make -C "${GLUONDIR}" update
     for target in ${TARGETS}; do
-        make -C "${GLUONDIR}" GLUON_TARGET="${target}" BROKEN=1 clean -j"$(nproc || echo 1)"
         make -C "${GLUONDIR}" GLUON_TARGET="${target}" BROKEN=1 GLUON_BRANCH="${TARGET_BRANCH}" -j"$(nproc || echo 1)"
     done
     

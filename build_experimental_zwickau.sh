@@ -19,16 +19,13 @@
 # SPDX-License-Identifier: AGPL-3.0
 
 BRANCH="experimental"
-STABLE_TARGETS="ar71xx-generic" # ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic"
-# BROKEN_TARGETS="ar71xx-mikrotik ipq806x mvebu ramips-mt7621 ramips-mt7628 ramips-rt305x sunxi"
-TARGETS="$STABLE_TARGETS" #  $BROKEN_TARGETS"
+STABLE_TARGETS="ar71xx-generic ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic ramips-mt7621 sunxi"
+BROKEN_TARGETS="ar71xx-mikrotik ipq806x mvebu ramips-mt7628 ramips-rt305x brcm2708-bcm2710"
+TARGETS="$STABLE_TARGETS $BROKEN_TARGETS"
 GLUON_RELEASE="b"$(date '+%Y%m%d')"z"
 THREADS=$(expr $(nproc) + 1)
 
 RETCODE="0"
-
-# git -C site checkout zwickau
-# git -C site pull
 
 rm ../output/images/factory/* ../output/images/sysupgrade/*
 start=$(date +%s)

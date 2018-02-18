@@ -1,0 +1,458 @@
+From ffa5a6526f319a43fbe9d0c7721e3c7b87d43dac Mon Sep 17 00:00:00 2001
+From: Sven Eckelmann <sven@narfation.org>
+Date: Thu, 21 Dec 2017 06:28:04 +0100
+Subject: [PATCH] ar71xx-generic: add experimental support for TP-Link CPE210
+ v2
+
+---
+ docs/index.rst                                     |   2 +-
+ .../luasrc/lib/gluon/upgrade/020-interfaces        |   1 +
+ .../luasrc/lib/gluon/upgrade/320-setup-ifname      |   1 +
+ patches/lede/0045-Add-support-for-CPE210-v2.patch  | 387 +++++++++++++++++++++
+ targets/ar71xx-generic                             |   2 +
+ 5 files changed, 392 insertions(+), 1 deletion(-)
+ create mode 100644 patches/lede/0045-Add-support-for-CPE210-v2.patch
+
+diff --git a/docs/index.rst b/docs/index.rst
+index b33df8791..f101d5bb8 100644
+--- a/docs/index.rst
++++ b/docs/index.rst
+@@ -164,7 +164,7 @@ ar71xx-generic
+ 
+   - Archer C5 (v1) [#ath10k]_
+   - Archer C7 (v2) [#ath10k]_
+-  - CPE210 (v1.0, v1.1)
++  - CPE210 (v1.0, v1.1, v2.0)
+   - CPE220 (v1.1)
+   - CPE510 (v1.0, v1.1)
+   - CPE520 (v1.1)
+diff --git a/package/gluon-core/luasrc/lib/gluon/upgrade/020-interfaces b/package/gluon-core/luasrc/lib/gluon/upgrade/020-interfaces
+index d1b6cee2b..197eea2bc 100755
+--- a/package/gluon-core/luasrc/lib/gluon/upgrade/020-interfaces
++++ b/package/gluon-core/luasrc/lib/gluon/upgrade/020-interfaces
+@@ -32,6 +32,7 @@ local wan_ifname = iface_exists(uci:get('network', 'wan', 'ifname'))
+ 
+ if platform.match('ar71xx', 'generic', {
+ 	'cpe210',
++	'cpe210v2',
+ 	'cpe510',
+ 	'wbs210',
+ 	'wbs510',
+diff --git a/package/gluon-setup-mode/luasrc/lib/gluon/upgrade/320-setup-ifname b/package/gluon-setup-mode/luasrc/lib/gluon/upgrade/320-setup-ifname
+index 7f0ca7b84..ac1982397 100755
+--- a/package/gluon-setup-mode/luasrc/lib/gluon/upgrade/320-setup-ifname
++++ b/package/gluon-setup-mode/luasrc/lib/gluon/upgrade/320-setup-ifname
+@@ -10,6 +10,7 @@ end
+ 
+ if platform.match('ar71xx', 'generic', {
+ 	'cpe210',
++	'cpe210v2',
+ 	'cpe510',
+ 	'wbs210',
+ 	'wbs510',
+diff --git a/patches/lede/0045-Add-support-for-CPE210-v2.patch b/patches/lede/0045-Add-support-for-CPE210-v2.patch
+new file mode 100644
+index 000000000..ccd27710c
+--- /dev/null
++++ b/patches/lede/0045-Add-support-for-CPE210-v2.patch
+@@ -0,0 +1,387 @@
++From: Gluon Patch Manager <gluon@void.example.com>
++Date: Thu, 21 Dec 2017 12:07:43 +0100
++Subject: ar71xx: add support for TP-Link CPE210 v2
++
++diff --git a/target/linux/ar71xx/base-files/etc/board.d/01_leds b/target/linux/ar71xx/base-files/etc/board.d/01_leds
++index e1efb561b33da4dcfcb82ee953cd888170476dfb..88417861d315cebafb157efd8779e9ed58239355 100755
++--- a/target/linux/ar71xx/base-files/etc/board.d/01_leds
+++++ b/target/linux/ar71xx/base-files/etc/board.d/01_leds
++@@ -184,6 +184,14 @@ wbs510)
++ 	ucidef_set_led_rssi "rssimediumhigh" "RSSIMEDIUMHIGH" "tp-link:green:link3" "wlan0" "51" "100" "-50" "13"
++ 	ucidef_set_led_rssi "rssihigh" "RSSIHIGH" "tp-link:green:link4" "wlan0" "76" "100" "-75" "13"
++ 	;;
+++cpe210v2)
+++	ucidef_set_led_netdev "lan" "LAN" "tp-link:green:lan0" "eth0"
+++	ucidef_set_rssimon "wlan0" "200000" "1"
+++	ucidef_set_led_rssi "rssilow" "RSSILOW" "tp-link:green:link1" "wlan0" "1" "100" "0" "13"
+++	ucidef_set_led_rssi "rssimediumlow" "RSSIMEDIUMLOW" "tp-link:green:link2" "wlan0" "26" "100" "-25" "13"
+++	ucidef_set_led_rssi "rssimediumhigh" "RSSIMEDIUMHIGH" "tp-link:green:link3" "wlan0" "51" "100" "-50" "13"
+++	ucidef_set_led_rssi "rssihigh" "RSSIHIGH" "tp-link:green:link4" "wlan0" "76" "100" "-75" "13"
+++	;;
++ cr3000)
++ 	ucidef_set_led_netdev "wan" "WAN" "pcs:blue:wan" "eth1"
++ 	ucidef_set_led_switch "lan1" "LAN1" "pcs:blue:lan1" "switch0" "0x04"
++diff --git a/target/linux/ar71xx/base-files/etc/board.d/02_network b/target/linux/ar71xx/base-files/etc/board.d/02_network
++index 24ead87850f13346ea4be4f9bfb5582e64a2c4ad..783fb714a8bd27dbc8e32731268211a4874f81c3 100755
++--- a/target/linux/ar71xx/base-files/etc/board.d/02_network
+++++ b/target/linux/ar71xx/base-files/etc/board.d/02_network
++@@ -67,6 +67,7 @@ ar71xx_setup_interfaces()
++ 	cap4200ag|\
++ 	cf-e380ac-v1|\
++ 	cf-e380ac-v2|\
+++	cpe210v2|\
++ 	eap120|\
++ 	eap300v2|\
++ 	eap7660d|\
++diff --git a/target/linux/ar71xx/base-files/lib/ar71xx.sh b/target/linux/ar71xx/base-files/lib/ar71xx.sh
++index 46711af2b26159ebb105fa97cd8a85bb9c00911a..43c318be85993953a94d3eb811355cfbe55add57 100755
++--- a/target/linux/ar71xx/base-files/lib/ar71xx.sh
+++++ b/target/linux/ar71xx/base-files/lib/ar71xx.sh
++@@ -347,11 +347,11 @@ tplink_pharos_get_model_string() {
++ 
++ 	# The returned string will end with \r\n, but we don't remove it here
++ 	# to simplify matching against it in the sysupgrade image check
++-	dd if=$part bs=1 skip=4360 2>/dev/null | head -n 1
+++	dd if=$part bs=1 skip=4360 count=64 2>/dev/null | tr -d '\r\0' | head -n 1
++ }
++ 
++ tplink_pharos_board_detect() {
++-	local model_string="$(tplink_pharos_get_model_string | tr -d '\r')"
+++	local model_string="$(tplink_pharos_get_model_string)"
++ 	local oIFS="$IFS"; IFS=":"; set -- $model_string; IFS="$oIFS"
++ 
++ 	local model="${1%%\(*}"
++@@ -512,6 +512,10 @@ ar71xx_board_detect() {
++ 		name="cpe210"
++ 		tplink_pharos_board_detect
++ 		;;
+++	*"CPE210 v2")
+++		name="cpe210v2"
+++		tplink_pharos_board_detect
+++		;;
++ 	*"CPE510/520")
++ 		name="cpe510"
++ 		tplink_pharos_board_detect
++diff --git a/target/linux/ar71xx/base-files/lib/upgrade/platform.sh b/target/linux/ar71xx/base-files/lib/upgrade/platform.sh
++index e65f6e2f7594ba373fbc9a26620859b9005c8532..1ff67c4849d4440190cc9026d946d4020bba31d3 100755
++--- a/target/linux/ar71xx/base-files/lib/upgrade/platform.sh
+++++ b/target/linux/ar71xx/base-files/lib/upgrade/platform.sh
++@@ -94,9 +94,10 @@ tplink_get_image_boot_size() {
++ }
++ 
++ tplink_pharos_check_image() {
++-	local magic_long="$(get_magic_long "$1")"
++-	[ "$magic_long" != "7f454c46" ] && {
++-		echo "Invalid image magic '$magic_long'"
+++	local image_magic="$(get_magic_long "$1")"
+++	local board_magic="$2"
+++	[ "$image_magic" != "$board_magic" ] && {
+++		echo "Invalid image magic '$image_magic'. Expected '$board_magic'."
++ 		return 1
++ 	}
++ 
++@@ -110,7 +111,7 @@ tplink_pharos_check_image() {
++ 	# read loop won't be executed at all, it will return true, so the image
++ 	# is accepted (loading the first 1.5M of a remote image for this check seems
++ 	# a bit extreme)
++-	dd if="$1" bs=1 skip=1511432 count=1024 2>/dev/null | while read line; do
+++	dd if="$1" bs=1 skip=1511432 count=1024 2>/dev/null | tr -d '\0\xff\r' | while read line; do
++ 		[ "$line" = "$model_string" ] && break
++ 	done || {
++ 		echo "Unsupported image (model not in support-list)"
++@@ -491,7 +492,13 @@ platform_check_image() {
++ 	eap120|\
++ 	wbs210|\
++ 	wbs510)
++-		tplink_pharos_check_image "$1" && return 0
+++		# magic = .ELF
+++		tplink_pharos_check_image "$1" "7f454c46" && return 0
+++		return 1
+++		;;
+++	cpe210v2)
+++		# magic = mktplinkfw v1 header
+++		tplink_pharos_check_image "$1" "01000000" && return 0
++ 		return 1
++ 		;;
++ 	a40|\
++diff --git a/target/linux/ar71xx/files/arch/mips/ath79/Kconfig.openwrt b/target/linux/ar71xx/files/arch/mips/ath79/Kconfig.openwrt
++index fb2afb965c4641df7cdcaf0920f2d56b3717fa9b..7a69414d0ff9312bbd6ac6e41cff6ae9694c2c0f 100644
++--- a/target/linux/ar71xx/files/arch/mips/ath79/Kconfig.openwrt
+++++ b/target/linux/ar71xx/files/arch/mips/ath79/Kconfig.openwrt
++@@ -1258,6 +1258,7 @@ config ATH79_MACH_ARCHER_C7
++ config ATH79_MACH_CPE510
++ 	bool "TP-LINK CPE510 support"
++ 	select SOC_AR934X
+++	select SOC_QCA953X
++ 	select ATH79_DEV_ETH
++ 	select ATH79_DEV_GPIO_BUTTONS
++ 	select ATH79_DEV_LEDS_GPIO
++diff --git a/target/linux/ar71xx/files/arch/mips/ath79/mach-cpe510.c b/target/linux/ar71xx/files/arch/mips/ath79/mach-cpe510.c
++index d2dbed1fe286c44d3188262e984253faaee7edba..64805938c40580513324cdf13c5840d778bc863c 100644
++--- a/target/linux/ar71xx/files/arch/mips/ath79/mach-cpe510.c
+++++ b/target/linux/ar71xx/files/arch/mips/ath79/mach-cpe510.c
++@@ -1,7 +1,8 @@
++ /*
++- *  TP-LINK CPE210/220/510/520 board support
+++ *  TP-LINK CPE210/210 v2/220/510/520 board support
++  *
++  *  Copyright (C) 2014 Matthias Schiffer <mschiffer@universe-factory.net>
+++ *  Copyright (C) 2017 Robert Marko <robimarko@gmail.com>
++  *
++  *  This program is free software; you can redistribute it and/or modify it
++  *  under the terms of the GNU General Public License version 2 as published
++@@ -41,6 +42,8 @@
++ #define CPE510_KEYS_POLL_INTERVAL	20 /* msecs */
++ #define CPE510_KEYS_DEBOUNCE_INTERVAL	(3 * CPE510_KEYS_POLL_INTERVAL)
++ 
+++/* CPE210 v2 reset GPIO */
+++#define CPE210_V2_GPIO_BTN_RESET	17
++ 
++ static struct gpio_led cpe510_leds_gpio[] __initdata = {
++ 	{
++@@ -98,6 +101,30 @@ static struct gpio_led wbs510_leds_gpio[] __initdata = {
++ 	},
++ };
++ 
+++static struct gpio_led cpe210_v2_leds_gpio[] __initdata = {
+++	{
+++		.name		= "tp-link:green:lan0",
+++		.gpio		= CPE510_GPIO_LED_LAN0,
+++		.active_low	= 1,
+++	}, {
+++		.name		= "tp-link:green:link1",
+++		.gpio		= CPE510_GPIO_LED_L1,
+++		.active_low	= 1,
+++	}, {
+++		.name		= "tp-link:green:link2",
+++		.gpio		= CPE510_GPIO_LED_L2,
+++		.active_low	= 1,
+++	}, {
+++		.name		= "tp-link:green:link3",
+++		.gpio		= CPE510_GPIO_LED_L3,
+++		.active_low	= 1,
+++	}, {
+++		.name		= "tp-link:green:link4",
+++		.gpio		= CPE510_GPIO_LED_L4,
+++		.active_low	= 1,
+++	},
+++};
+++
++ static struct gpio_keys_button cpe510_gpio_keys[] __initdata = {
++ 	{
++ 		.desc		= "Reset button",
++@@ -109,6 +136,17 @@ static struct gpio_keys_button cpe510_gpio_keys[] __initdata = {
++ 	}
++ };
++ 
+++static struct gpio_keys_button cpe210_v2_gpio_keys[] __initdata = {
+++	{
+++		.desc		= "Reset button",
+++		.type		= EV_KEY,
+++		.code		= KEY_RESTART,
+++		.debounce_interval = CPE510_KEYS_DEBOUNCE_INTERVAL,
+++		.gpio		= CPE210_V2_GPIO_BTN_RESET,
+++		.active_low	= 1,
+++	}
+++};
+++
++ static void __init cpe_setup(u8 *mac)
++ {
++ 	/* Disable JTAG, enabling GPIOs 0-3 */
++@@ -171,9 +209,33 @@ static void __init wbs_setup(void)
++ 	ath79_register_wmac(ee, mac);
++ }
++ 
+++static void __init cpe210_v2_setup(void)
+++{
+++	u8 *mac = (u8 *) KSEG1ADDR(0x1f830008);
+++	u8 *ee = (u8 *) KSEG1ADDR(0x1fff1000);
+++	
+++	ath79_register_leds_gpio(-1, ARRAY_SIZE(cpe210_v2_leds_gpio),
+++				 cpe210_v2_leds_gpio);
+++	ath79_register_gpio_keys_polled(-1, CPE510_KEYS_POLL_INTERVAL,
+++					ARRAY_SIZE(cpe210_v2_gpio_keys),
+++					cpe210_v2_gpio_keys);
+++	ath79_register_m25p80(NULL);
+++	ath79_register_mdio(0, 0x0);
+++	ath79_init_mac(ath79_eth0_data.mac_addr, mac, 0);
+++	ath79_eth0_data.duplex = DUPLEX_FULL;
+++	ath79_eth0_data.phy_if_mode = PHY_INTERFACE_MODE_MII;
+++	ath79_eth0_data.speed = SPEED_100;
+++	ath79_eth0_data.phy_mask = BIT(4);
+++	ath79_register_eth(0);
+++	ath79_register_wmac(ee, mac);
+++}
+++
++ MIPS_MACHINE(ATH79_MACH_CPE210, "CPE210", "TP-LINK CPE210/220",
++ 	     cpe210_setup);
++ 
+++MIPS_MACHINE(ATH79_MACH_CPE210_V2, "CPE210V2", "TP-LINK CPE210 v2",
+++	     cpe210_v2_setup);
+++
++ MIPS_MACHINE(ATH79_MACH_CPE510, "CPE510", "TP-LINK CPE510/520",
++ 	     cpe510_setup);
++ 
++diff --git a/target/linux/ar71xx/files/arch/mips/ath79/machtypes.h b/target/linux/ar71xx/files/arch/mips/ath79/machtypes.h
++index 8864e0deda57b926e88dceebd26056a2f8099380..75a7861605ff45c36be8a0a01e5151bc75f2edff 100644
++--- a/target/linux/ar71xx/files/arch/mips/ath79/machtypes.h
+++++ b/target/linux/ar71xx/files/arch/mips/ath79/machtypes.h
++@@ -60,7 +60,8 @@ enum ath79_mach_type {
++ 	ATH79_MACH_CF_E380AC_V2,		/* COMFAST CF-E380AC v2 */
++ 	ATH79_MACH_CF_E520N,			/* COMFAST CF-E520N */
++ 	ATH79_MACH_CF_E530N,			/* COMFAST CF-E530N */
++-	ATH79_MACH_CPE210,			/* TP-LINK CPE210 */
+++	ATH79_MACH_CPE210,			/* TP-LINK CPE210 V1 */
+++	ATH79_MACH_CPE210_V2,			/* TP-LINK CPE210 v2 */
++ 	ATH79_MACH_CPE510,			/* TP-LINK CPE510 */
++ 	ATH79_MACH_CPE830,			/* YunCore CPE830 */
++ 	ATH79_MACH_CPE870,			/* YunCore CPE870 */
++diff --git a/target/linux/ar71xx/image/tp-link.mk b/target/linux/ar71xx/image/tp-link.mk
++index 6933654e575a1ef2c92e4c656696a479cba4c594..2c2fc258b4d86398db98b0a5ea55641b57298f3e 100644
++--- a/target/linux/ar71xx/image/tp-link.mk
+++++ b/target/linux/ar71xx/image/tp-link.mk
++@@ -142,6 +142,18 @@ $(Device/cpe510-520)
++   TPLINK_BOARD_NAME := CPE210
++ endef
++ 
+++define Device/cpe210v2
+++$(Device/cpe510-520)
+++  DEVICE_TITLE := TP-LINK CPE210 v2
+++  BOARDNAME := CPE210V2
+++  TPLINK_BOARD_NAME := CPE210V2
+++  TPLINK_FLASHLAYOUT := 8Mlzma
+++  KERNEL := kernel-bin | patch-cmdline | lzma | mktplinkfw-combined
+++  TPLINK_HWID := 0x0
+++  TPLINK_HWREV := 0
+++  TPLINK_HEADER_VERSION := 1
+++endef
+++
++ define Device/wbs210
++ $(Device/cpe510-520)
++   DEVICE_TITLE := TP-LINK WBS210
++@@ -157,7 +169,7 @@ $(Device/cpe510-520)
++   BOARDNAME := WBS510
++   TPLINK_BOARD_NAME := WBS510
++ endef
++-TARGET_DEVICES += cpe210-220 cpe510-520 wbs210 wbs510
+++TARGET_DEVICES += cpe210-220 cpe210v2 cpe510-520 wbs210 wbs510
++ 
++ define Device/re450
++   DEVICE_TITLE := TP-LINK RE450
++diff --git a/target/linux/ar71xx/patches-4.4/999-qca953x-clock-25mhz.patch b/target/linux/ar71xx/patches-4.4/999-qca953x-clock-25mhz.patch
++new file mode 100644
++index 0000000000000000000000000000000000000000..e38e7f8e132df213bdd3e4fcde204ccc8155eb23
++--- /dev/null
+++++ b/target/linux/ar71xx/patches-4.4/999-qca953x-clock-25mhz.patch
++@@ -0,0 +1,59 @@
+++Work around broken TP-Link CPE210 v2 clock bootstrap flag
+++---
+++ arch/mips/ath79/clock.c    | 6 +++++-
+++ arch/mips/ath79/dev-wmac.c | 7 +++----
+++ 2 files changed, 8 insertions(+), 5 deletions(-)
+++
+++--- a/arch/mips/ath79/clock.c
++++++ b/arch/mips/ath79/clock.c
+++@@ -24,6 +24,7 @@
+++ #include <asm/mach-ath79/ath79.h>
+++ #include <asm/mach-ath79/ar71xx_regs.h>
+++ #include "common.h"
++++#include "machtypes.h"
+++ 
+++ #define AR71XX_BASE_FREQ	40000000
+++ #define AR724X_BASE_FREQ	40000000
+++@@ -365,9 +366,12 @@ static void __init qca953x_clocks_init(v
+++ 	u32 bootstrap;
+++ 
+++ 	bootstrap = ath79_reset_rr(QCA953X_RESET_REG_BOOTSTRAP);
+++-	if (bootstrap &	QCA953X_BOOTSTRAP_REF_CLK_40)
+++-		ref_rate = 40 * 1000 * 1000;
+++-	else
++++	if (bootstrap &	QCA953X_BOOTSTRAP_REF_CLK_40) {
++++		if (mips_machtype == ATH79_MACH_CPE210_V2)
++++			ref_rate = 25 * 1000 * 1000;
++++		else
++++			ref_rate = 40 * 1000 * 1000;
++++	} else
+++ 		ref_rate = 25 * 1000 * 1000;
+++ 
+++ 	pll = ath79_pll_rr(QCA953X_PLL_CPU_CONFIG_REG);
+++--- a/arch/mips/ath79/dev-wmac.c
++++++ b/arch/mips/ath79/dev-wmac.c
+++@@ -25,6 +25,8 @@
+++ #include "common.h"
+++ #include "dev-wmac.h"
+++ 
++++#include <asm/prom.h>
++++
+++ static u8 ath79_wmac_mac[ETH_ALEN];
+++ 
+++ static struct ath9k_platform_data ath79_wmac_data = {
+++@@ -162,9 +164,12 @@ static void qca953x_wmac_setup(void)
+++ 	ath79_wmac_resources[1].end = ATH79_IP2_IRQ(1);
+++ 
+++ 	t = ath79_reset_rr(QCA953X_RESET_REG_BOOTSTRAP);
+++-	if (t & QCA953X_BOOTSTRAP_REF_CLK_40)
+++-		ath79_wmac_data.is_clk_25mhz = false;
+++-	else
++++	if (t & QCA953X_BOOTSTRAP_REF_CLK_40) {
++++		if (strcmp(mips_get_machine_name(), "TP-LINK CPE210 v2") == 0)
++++			ath79_wmac_data.is_clk_25mhz = true;
++++		else
++++			ath79_wmac_data.is_clk_25mhz = false;
++++	} else
+++ 		ath79_wmac_data.is_clk_25mhz = true;
+++ 
+++ 	ath79_wmac_data.get_mac_revision = ar93xx_get_soc_revision;
++diff --git a/tools/firmware-utils/src/tplink-safeloader.c b/tools/firmware-utils/src/tplink-safeloader.c
++index 24684268b1a3fe491c4eb876a5ebefc700f2e56e..22fa1933f9b82640524e536c8e08fe1eded6ed85 100644
++--- a/tools/firmware-utils/src/tplink-safeloader.c
+++++ b/tools/firmware-utils/src/tplink-safeloader.c
++@@ -154,6 +154,47 @@ static struct device_info boards[] = {
++ 		.last_sysupgrade_partition = "file-system",
++ 	},
++ 
+++	/** Firmware layout for the CPE210 V2 */
+++	{
+++		.id     = "CPE210V2",
+++		.vendor = "CPE210(TP-LINK|UN|N300-2|00000000):2.0\r\n",
+++		.support_list =
+++			"SupportList:\r\n"
+++			"CPE210(TP-LINK|EU|N300-2|00000000):2.0\r\n"
+++			"CPE210(TP-LINK|EU|N300-2|45550000):2.0\r\n"
+++			"CPE210(TP-LINK|EU|N300-2|55530000):2.0\r\n"
+++			"CPE210(TP-LINK|UN|N300-2|00000000):2.0\r\n"
+++			"CPE210(TP-LINK|UN|N300-2|45550000):2.0\r\n"
+++			"CPE210(TP-LINK|UN|N300-2|55530000):2.0\r\n"
+++			"CPE210(TP-LINK|UN|N300-2):2.0\r\n"
+++			"CPE210(TP-LINK|EU|N300-2):2.0\r\n"
+++			"CPE210(TP-LINK|US|N300-2):2.0\r\n",
+++		.support_trail = '\xff',
+++		.soft_ver = NULL,
+++
+++		.partitions = {
+++			{"fs-uboot", 0x00000, 0x20000},
+++			{"partition-table", 0x20000, 0x02000},
+++			{"default-mac", 0x30000, 0x00020},
+++			{"product-info", 0x31100, 0x00100},
+++			{"device-info", 0x31400, 0x00400},
+++			{"signature", 0x32000, 0x00400},
+++			{"device-id", 0x33000, 0x00100},
+++			{"os-image", 0x40000, 0x170000},
+++			{"soft-version", 0x1b0000, 0x00100},
+++			{"support-list", 0x1b1000, 0x01000},
+++			{"file-system", 0x1c0000, 0x600000},
+++			{"user-config", 0x7c0000, 0x10000},
+++			{"default-config", 0x7d0000, 0x10000},
+++			{"log", 0x7e0000, 0x10000},
+++			{"radio", 0x7f0000, 0x10000},
+++			{NULL, 0, 0}
+++		},
+++
+++		.first_sysupgrade_partition = "os-image",
+++		.last_sysupgrade_partition = "file-system",
+++	},
+++
++ 	/** Firmware layout for the CPE510/520 */
++ 	{
++ 		.id	= "CPE510",
+diff --git a/targets/ar71xx-generic b/targets/ar71xx-generic
+index 93e2d35e6..5c30e0e69 100644
+--- a/targets/ar71xx-generic
++++ b/targets/ar71xx-generic
+@@ -150,6 +150,8 @@ device tp-link-cpe210-v1.0 cpe210-220
+ alias tp-link-cpe210-v1.1
+ alias tp-link-cpe220-v1.1
+ 
++device tp-link-cpe210-v2.0 cpe210v2
++
+ device tp-link-cpe510-v1.0 cpe510-520
+ alias tp-link-cpe510-v1.1
+ alias tp-link-cpe520-v1.1

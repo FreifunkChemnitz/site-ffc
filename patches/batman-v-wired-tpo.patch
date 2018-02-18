@@ -1,0 +1,13 @@
+diff --git a/package/gluon-mesh-batman-adv/files/lib/gluon/core/mesh/post-setup.d/40-gluon-mesh-batman-adv-wired-tpo b/package/gluon-mesh-batman-adv/files/lib/gluon/core/mesh/post-setup.d/40-gluon-mesh-batman-adv-wired-tpo
+new file mode 100775
+index 0000000..3253d64
+--- /dev/null
++++ b/package/gluon-mesh-batman-adv/files/lib/gluon/core/mesh/post-setup.d/40-gluon-mesh-batman-adv-wired-tpo
+@@ -0,0 +1,7 @@
++#!/bin/sh
++
++if [ -f /sys/devices/virtual/net/br-mesh_lan/batman_adv/throughput_override ]; then echo 1000000 > /sys/devices/virtual/net/br-mesh_lan/batman_adv/throughput_override; fi
++
++if [ -f /sys/devices/virtual/net/br-wan/batman_adv/throughput_override ]; then echo 1000000 > /sys/devices/virtual/net/br-wan/batman_adv/throughput_override; fi
++
++if [ -f /sys/devices/virtual/net/mesh-vpn/batman_adv/throughput_override ]; then echo 1000000 > /sys/devices/virtual/net/mesh-vpn/batman_adv/throughput_override; fi

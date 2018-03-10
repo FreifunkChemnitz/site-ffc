@@ -30,7 +30,7 @@ rm ../output/images/factory/* ../output/images/sysupgrade/*
 start=$(date +%s)
 for TARGET in $TARGETS; do
 	echo "################# $(date) start building target $TARGET ###########################"
-	(cd .. ; make -j$THREADS GLUON_RELEASE=$GLUON_RELEASE GLUON_TARGET=$TARGET GLUON_BRANCH=$BRANCH BROKEN=1)
+	make -C ../ -j$THREADS GLUON_RELEASE=$GLUON_RELEASE GLUON_TARGET=$TARGET GLUON_BRANCH=$BRANCH BROKEN=1
 	CURRENTRET=$?
 	RETCODE=$[ $RETCODE + $CURRENTRET ]
 	if [ $CURRENTRET -ne "0" ]; then
@@ -40,12 +40,12 @@ done
 echo -n "finished: "; date
 echo "Dauer: $((($(date +%s)-start)/60)) Minuten"
 echo "########################### start creating manifest ###########################"
-(cd .. ; make manifest GLUON_BRANCH=$BRANCH GLUON_RELEASE=$GLUON_RELEASE GLUON_PRIORITY=1 BROKEN=1)
+make -C ../ manifest GLUON_BRANCH=$BRANCH GLUON_RELEASE=$GLUON_RELEASE GLUON_PRIORITY=1 BROKEN=1
 if [ $RETCODE -ne "0" ]; then
 	echo $(date -Isecond)" something went wrong while building"
 fi
 rm /var/www/html/firmware/$BRANCH/factory/* /var/www/html/firmware/$BRANCH/sysupgrade/*
-mkdir -p /var/www/html/firmware/$BRANCH/
+mkdir /var/www/html/firmware/$BRANCH/ 2> /dev/null || touch /var/www/html/firmware/$BRANCH/
 cp -r ../output/images/* /var/www/html/firmware/$BRANCH/
 echo "################################ sign manifest ################################"
 ../contrib/sign.sh /home/buildbot/keys/key.secret /var/www/html/firmware/$BRANCH/sysupgrade/$BRANCH.manifest

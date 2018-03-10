@@ -1,0 +1,13 @@
+diff --git a/build_experimental_zwickau.sh b/build_experimental_zwickau.sh
+index 6bc3bc5..25b8ecd 100755
+--- a/build_experimental_zwickau.sh
++++ b/build_experimental_zwickau.sh
+@@ -46,7 +46,7 @@ if [ $RETCODE -ne "0" ]; then
+ 	echo $(date -Isecond)" something went wrong while building"
+ fi
+ rm /var/www/html/firmware/$BRANCH/factory/* /var/www/html/firmware/$BRANCH/sysupgrade/*
+-mkdir -p /var/www/html/firmware/$BRANCH/
++mkdir /var/www/html/firmware/$BRANCH/ 2> /dev/null || touch /var/www/html/firmware/$BRANCH/
+ cp -r ../output/images/* /var/www/html/firmware/$BRANCH/
+ echo "################################ sign manifest ################################"
+ ../contrib/sign.sh /home/buildbot/keys/key.secret /var/www/html/firmware/$BRANCH/sysupgrade/$BRANCH.manifest

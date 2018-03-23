@@ -45,9 +45,9 @@ make -C ../ manifest GLUON_BRANCH=$BRANCH GLUON_RELEASE=$GLUON_RELEASE GLUON_PRI
 if [ $RETCODE -ne "0" ]; then
 	echo $(date -Isecond)" something went wrong while building"
 fi
-rm /var/www/html/firmware/$BRANCH/factory/* /var/www/html/firmware/$BRANCH/sysupgrade/*
-mkdir /var/www/html/firmware/$BRANCH/ 2> /dev/null || touch /var/www/html/firmware/$BRANCH/
-cp -r ../output/images/* /var/www/html/firmware/$BRANCH/
+rm /var/www/html/zwickau/$BRANCH/factory/* /var/www/html/zwickau/$BRANCH/sysupgrade/*
+mkdir /var/www/html/zwickau/$BRANCH/ 2> /dev/null || touch /var/www/html/zwickau/$BRANCH/
+cp -r ../output/images/* /var/www/html/zwickau/$BRANCH/
 echo "################################ sign manifest ################################"
-../contrib/sign.sh /home/buildbot/keys/key.secret /var/www/html/firmware/$BRANCH/sysupgrade/$BRANCH.manifest
+../contrib/sign.sh /home/buildbot/keys/key.secret /var/www/html/zwickau/$BRANCH/sysupgrade/$BRANCH.manifest
 

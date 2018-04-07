@@ -1,0 +1,26 @@
+From 4187e25ebe495203a63441cd0d6c009d4aeea39c Mon Sep 17 00:00:00 2001
+From: zMarcel <ff.z-casparistrasse@mailbox.org>
+Date: Sat, 7 Apr 2018 23:28:22 +0200
+Subject: [PATCH 1/1] change openwrt-routing/packages commit
+
+updated openwrt-routing/packages.git commit hash to use batman-adv, batctl and alfred v2018.0
+---
+ modules | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/modules b/modules
+index 03e3cc1..a482368 100644
+--- a/modules
++++ b/modules
+@@ -13,7 +13,7 @@ PACKAGES_GLUON_BRANCH=v2017.1.x
+ PACKAGES_GLUON_COMMIT=906f5ef13ec91dd7433bd1a6bd4ffbd15614bbb3
+ 
+ PACKAGES_ROUTING_REPO=https://github.com/openwrt-routing/packages.git
+-PACKAGES_ROUTING_COMMIT=e656a6e0e69dd45b7caa24775bc86b6eb5dcfe7f
++PACKAGES_ROUTING_COMMIT=536782119f0a8eec261cf7d583e88d1cef88c667
+ 
+ PACKAGES_LUCI_REPO=https://github.com/openwrt/luci.git
+ PACKAGES_LUCI_BRANCH=lede-17.01
+-- 
+2.7.4
+

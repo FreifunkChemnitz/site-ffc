@@ -1,5 +1,5 @@
 diff --git a/package/gluon-mesh-batman-adv/src/respondd.c b/package/gluon-mesh-batman-adv/src/respondd.c
-index 60df1523..c0158423 100644
+index 60df1523..f68ba386 100644
 --- a/package/gluon-mesh-batman-adv/src/respondd.c
 +++ b/package/gluon-mesh-batman-adv/src/respondd.c
 @@ -581,9 +581,8 @@ static struct json_object * ifnames2addrs(struct json_object *interfaces) {
@@ -92,7 +92,7 @@ index 60df1523..c0158423 100644
  		json_object_object_add(opts->interfaces, ifname, interface);
  	}
  
-+	tq = throughput >= 32768 ? 255 : throughput < 8192 ? throughput >> 10 : (throughput - 8192) / 100 + 8;
++	tq = throughput >= gluonutil_get_pseudo_tq(throughput);
 +
  	json_object_object_add(obj, "tq", json_object_new_int(tq));
  	json_object_object_add(obj, "lastseen", json_object_new_double(lastseen / 1000.));
@@ -120,7 +120,7 @@ index ca965d48..37e60d2b 100644
  
  static int nlquery_error_cb(struct sockaddr_nl *nla __maybe_unused,
 diff --git a/package/gluon-status-page-api/src/neighbours-batadv.c b/package/gluon-status-page-api/src/neighbours-batadv.c
-index 7d5d0211..31ff47a0 100644
+index 7d5d0211..a68f6ae9 100644
 --- a/package/gluon-status-page-api/src/neighbours-batadv.c
 +++ b/package/gluon-status-page-api/src/neighbours-batadv.c
 @@ -15,9 +15,8 @@ struct neigh_netlink_opts {
@@ -134,17 +134,18 @@ index 7d5d0211..31ff47a0 100644
    BATADV_ATTR_HARD_IFINDEX,
    BATADV_ATTR_LAST_SEEN_MSECS,
  };
-@@ -28,8 +27,8 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
+@@ -28,9 +27,8 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
    struct nlmsghdr *nlh = nlmsg_hdr(msg);
    struct batadv_nlquery_opts *query_opts = arg;
    struct genlmsghdr *ghdr;
 -  uint8_t *orig;
    uint8_t *dest;
+-  uint8_t tq;
 +  uint32_t throughput;
-   uint8_t tq;
    uint32_t hardif;
    uint32_t lastseen;
-@@ -39,44 +38,53 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
+   char ifname_buf[IF_NAMESIZE], *ifname;
+@@ -39,46 +37,53 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
  
    opts = container_of(query_opts, struct neigh_netlink_opts, query_opts);
  
@@ -212,12 +213,13 @@ index 7d5d0211..31ff47a0 100644
 +	  printf("!neigh");
 +	  return NL_OK;
 +  }
-+
-+  tq = throughput >= 32768 ? 255 : throughput < 8192 ? throughput >> 10 : (throughput - 8192) / 100 + 8;
  
-   json_object_object_add(neigh, "tq", json_object_new_int(tq));
+-  json_object_object_add(neigh, "tq", json_object_new_int(tq));
++  json_object_object_add(neigh, "tp", json_object_new_int(throughput));
    json_object_object_add(neigh, "lastseen", json_object_new_double(lastseen / 1000.));
-@@ -99,7 +107,7 @@ static json_object *neighbours(void) {
+   json_object_object_add(neigh, "ifname", json_object_new_string(ifname));
+ 
+@@ -99,7 +104,7 @@ static json_object *neighbours(void) {
    if (!opts.obj)
      return NULL;
  
@@ -226,3 +228,84 @@ index 7d5d0211..31ff47a0 100644
                                 parse_orig_list_netlink_cb, NLM_F_DUMP,
                                 &opts.query_opts);
    if (ret < 0) {
+diff --git a/package/gluon-status-page/src/js/lib/gui/neighbours.js b/package/gluon-status-page/src/js/lib/gui/neighbours.js
+index f6ce9e42..8fa4d794 100644
+--- a/package/gluon-status-page/src/js/lib/gui/neighbours.js
++++ b/package/gluon-status-page/src/js/lib/gui/neighbours.js
+@@ -34,7 +34,7 @@ function (Helper, SignalGraph, Signal) {
+     var el = parent.insertRow()
+ 
+     var tdHostname = el.insertCell()
+-    var tdTQ = el.insertCell()
++    var tdTP = el.insertCell()
+     var tdSignal = el.insertCell()
+     var tdDistance = el.insertCell()
+     var tdInactive = el.insertCell()
+@@ -78,10 +78,10 @@ function (Helper, SignalGraph, Signal) {
+         tdInactive.textContent = Math.round(inactive / 1000) + " s"
+       }
+ 
+-      if ("batadv" in d)
+-        tdTQ.textContent = Math.round(d.batadv.tq / 2.55) + " %"
++      if ("batadv" in d && "tp" in d.batadv)
++        tdTP.textContent = d.batadv.tp > 1999 ? Math.round(d.batadv.tp / 1000) + "M" : d.batadv.tp + "k"
+       else
+-        tdTQ.textContent = "‒"
++        tdTP.textContent = "‒"
+ 
+       if (infoSet)
+         return
+@@ -136,7 +136,7 @@ function (Helper, SignalGraph, Signal) {
+     tr.appendChild(th)
+ 
+     th = document.createElement("th")
+-    th.textContent = "TQ"
++    th.textContent = "bit/s"
+     tr.appendChild(th)
+ 
+     th = document.createElement("th")
+diff --git a/package/libgluonutil/src/libgluonutil.c b/package/libgluonutil/src/libgluonutil.c
+index 5932c544..adaaf5bb 100644
+--- a/package/libgluonutil/src/libgluonutil.c
++++ b/package/libgluonutil/src/libgluonutil.c
+@@ -31,6 +31,7 @@
+ #include <stdio.h>
+ #include <string.h>
+ #include <stdlib.h>
++#include <math.h>
+ 
+ 
+ char * gluonutil_read_line(const char *filename) {
+@@ -112,3 +113,12 @@ struct json_object * gluonutil_wrap_and_free_string(char *str) {
+ struct json_object * gluonutil_load_site_config(void) {
+ 	return json_object_from_file("/lib/gluon/site.json");
+ }
++
++uint8_t gluonutil_get_pseudo_tq(uint32_t throughput) {
++        return throughput >= 54000 ? 255 :
++            throughput < 417 ? 0 :
++            (uint8_t)((1.42459274279287898080 *
++		       log2(throughput) -
++		       12.39555493934044793479) *
++		      25.5);
++}
+diff --git a/package/libgluonutil/src/libgluonutil.h b/package/libgluonutil/src/libgluonutil.h
+index 96195281..5d6210e1 100644
+--- a/package/libgluonutil/src/libgluonutil.h
++++ b/package/libgluonutil/src/libgluonutil.h
+@@ -27,6 +27,8 @@
+ #ifndef _LIBGLUON_LIBGLUON_H_
+ #define _LIBGLUON_LIBGLUON_H_
+ 
++#include <stdint.h>
++
+ char * gluonutil_read_line(const char *filename);
+ char * gluonutil_get_sysconfig(const char *key);
+ char * gluonutil_get_node_id(void);
+@@ -37,4 +39,6 @@ struct json_object * gluonutil_wrap_and_free_string(char *str);
+ 
+ struct json_object * gluonutil_load_site_config(void);
+ 
++uint8_t gluonutil_get_pseudo_tq(uint32_t throughput);
++
+ #endif /* _LIBGLUON_LIBGLUON_H_ */

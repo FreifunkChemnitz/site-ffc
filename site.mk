@@ -22,7 +22,8 @@ GLUON_SITE_PACKAGES := \
         gluon-status-page \
         iwinfo \
         iptables \
-        haveged
+        haveged \
+	wodca
 
 FLASH_4MB := false
 ifeq ($(GLUON_TARGET),ar71xx-tiny)

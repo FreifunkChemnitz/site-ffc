@@ -1,14 +1,14 @@
-From f9b080912fa607370df1f135247af22a85a5b8f4 Mon Sep 17 00:00:00 2001
+From 0112a50872b6e57e675e6c4a399f54a289bf6d71 Mon Sep 17 00:00:00 2001
 From: zMarcel <ff.z-casparistrasse@mailbox.org>
-Date: Mon, 30 Apr 2018 16:32:19 +0200
-Subject: [PATCH] update patch for v2017.1.7
+Date: Mon, 7 May 2018 00:05:32 +0200
+Subject: [PATCH] update to batman-adv 2018.1
 
 ---
  modules | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/modules b/modules
-index 805f047..da12adf 100644
+index 805f047..63b87d0 100644
 --- a/modules
 +++ b/modules
 @@ -13,7 +13,7 @@ PACKAGES_GLUON_BRANCH=v2017.1.x
@@ -16,7 +16,7 @@ index 805f047..da12adf 100644
  
  PACKAGES_ROUTING_REPO=https://github.com/openwrt-routing/packages.git
 -PACKAGES_ROUTING_COMMIT=e656a6e0e69dd45b7caa24775bc86b6eb5dcfe7f
-+PACKAGES_ROUTING_COMMIT=536782119f0a8eec261cf7d583e88d1cef88c667
++PACKAGES_ROUTING_COMMIT=ba5d2fc76e1cee2cb656d955514c8aa526875a6a
  
  PACKAGES_LUCI_REPO=https://github.com/openwrt/luci.git
  PACKAGES_LUCI_BRANCH=lede-17.01

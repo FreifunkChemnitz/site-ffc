@@ -9,13 +9,13 @@ GLUON_SITE_PACKAGES := \
         gluon-config-mode-mesh-vpn \
         gluon-config-mode-geo-location \
         gluon-config-mode-contact-info \
+        gluon-config-mode-domain-select \
         gluon-ebtables-filter-multicast \
         gluon-ebtables-filter-ra-dhcp \
         gluon-authorized-keys \
         gluon-web-admin \
         gluon-web-autoupdater \
         gluon-web-network \
-        gluon-web-node-role \
         gluon-web-wifi-config \
         gluon-mesh-vpn-fastd \
         gluon-radvd \
@@ -38,8 +38,8 @@ GLUON_SITE_PACKAGES += \
 	ppp \
 	kmod-fs-ext4 \
 	kmod-nls-utf8 \
-        kmod-usb2 \
-        kmod-usb-hid \
+	kmod-usb2 \
+	kmod-usb-hid \
 	kmod-usb-net \
 	kmod-usb-net-asix \
 	kmod-usb-net-cdc-ether \
@@ -67,4 +67,3 @@ GLUON_ATH10K_MESH ?= 11s
 GLUON_REGION ?= eu
 
 GLUON_MULTIDOMAIN = 1
-

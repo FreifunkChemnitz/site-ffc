@@ -16,6 +16,7 @@ GLUON_SITE_PACKAGES := \
         gluon-web-admin \
         gluon-web-autoupdater \
         gluon-web-network \
+	gluon-web-node-role \
         gluon-web-wifi-config \
         gluon-mesh-vpn-fastd \
         gluon-radvd \

@@ -47,7 +47,8 @@ GLUON_SITE_PACKAGES += \
 	kmod-usb-serial \
 	kmod-usb-serial-option \
 	kmod-usb-serial-wwan \
-	kmod-usb-storage
+	kmod-usb-storage \
+	respondd-module-airtime
 endif
 
 ifeq ($(GLUON_TARGET),x86-64)

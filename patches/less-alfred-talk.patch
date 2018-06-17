@@ -1,7 +1,22 @@
+From 9f1b45d45e846a4f9e362408487521ffb3c1b3ca Mon Sep 17 00:00:00 2001
+From: zMarcel <ff.z-casparistrasse@mailbox.org>
+Date: Sun, 17 Jun 2018 14:41:30 +0200
+Subject: [PATCH] update less-less-alfred-talk since it is not possible to turn
+ of alfred, this patch reduces its talk to a minimum update: send node-info
+ ever 30 minutes
+
+---
+ package/gluon-alfred/files/usr/lib/micron.d/alfred | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
 diff --git a/package/gluon-alfred/files/usr/lib/micron.d/alfred b/package/gluon-alfred/files/usr/lib/micron.d/alfred
-index 87c052b2..5de37d70 100644
+index 87c052b..d5f8b3d 100644
 --- a/package/gluon-alfred/files/usr/lib/micron.d/alfred
 +++ b/package/gluon-alfred/files/usr/lib/micron.d/alfred
-@@ -1 +1 @@
+@@ -1 +1,2 @@
 -* * * * * gluon-neighbour-info -d ::1 -p 1001 -t 1 -c 1 -r nodeinfo | gzip | alfred -s 158; gluon-neighbour-info -d ::1 -p 1001 -t 1 -c 1 -r statistics | gzip | alfred -s 159; gluon-neighbour-info -d ::1 -p 1001 -t 1 -c 1 -r neighbours | gzip | alfred -s 160
 +* * * * * gluon-neighbour-info -d ::1 -p 1001 -t 1 -c 1 -r statistics | gzip | alfred -s 159
++*/30 * * * * gluon-neighbour-info -d ::1 -p 1001 -t 1 -c 1 -r nodeinfo | gzip | alfred -s 158
+-- 
+2.7.4
+

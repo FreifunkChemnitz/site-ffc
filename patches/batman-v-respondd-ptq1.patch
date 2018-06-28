@@ -1,66 +1,60 @@
 diff --git a/package/gluon-mesh-batman-adv/src/respondd.c b/package/gluon-mesh-batman-adv/src/respondd.c
-index 60df1523..f68ba386 100644
+index ca7ae968..5c3afee6 100644
 --- a/package/gluon-mesh-batman-adv/src/respondd.c
 +++ b/package/gluon-mesh-batman-adv/src/respondd.c
-@@ -581,9 +581,8 @@ static struct json_object * ifnames2addrs(struct json_object *interfaces) {
+@@ -584,22 +584,21 @@ static struct json_object * ifnames2addrs(struct json_object *interfaces) {
+ 	return ret;
  }
  
- static const enum batadv_nl_attrs parse_orig_list_mandatory[] = {
+-static const enum batadv_nl_attrs parse_orig_list_mandatory[] = {
 -	BATADV_ATTR_ORIG_ADDRESS,
++static const enum batadv_nl_attrs parse_neigh_list_mandatory[] = {
  	BATADV_ATTR_NEIGH_ADDRESS,
 -	BATADV_ATTR_TQ,
 +	BATADV_ATTR_THROUGHPUT,
  	BATADV_ATTR_HARD_IFINDEX,
  	BATADV_ATTR_LAST_SEEN_MSECS,
  };
-@@ -594,8 +593,8 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
+ 
+-static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
++static int parse_neigh_list_netlink_cb(struct nl_msg *msg, void *arg)
+ {
+ 	struct nlattr *attrs[BATADV_ATTR_MAX+1];
  	struct nlmsghdr *nlh = nlmsg_hdr(msg);
  	struct batadv_nlquery_opts *query_opts = arg;
  	struct genlmsghdr *ghdr;
 -	uint8_t *orig;
- 	uint8_t *dest;
+-	uint8_t *dest;
++	uint8_t *neigh;
 +	uint32_t throughput;
  	uint8_t tq;
  	uint32_t hardif;
  	uint32_t lastseen;
-@@ -605,44 +604,51 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
- 
- 	opts = container_of(query_opts, struct neigh_netlink_opts, query_opts);
- 
--	if (!genlmsg_valid_hdr(nlh, 0))
-+	if (!genlmsg_valid_hdr(nlh, 0)) {
-+		printf("!genlmsg_valid_hdr");
- 		return NL_OK;
-+	}
+@@ -615,35 +614,28 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
  
  	ghdr = nlmsg_data(nlh);
  
 -	if (ghdr->cmd != BATADV_CMD_GET_ORIGINATORS)
-+	if (ghdr->cmd != BATADV_CMD_GET_NEIGHBORS) {
-+		printf("!BATADV_CMD_GET_NEIGHBORS");
++	if (ghdr->cmd != BATADV_CMD_GET_NEIGHBORS)
  		return NL_OK;
-+	}
  
  	if (nla_parse(attrs, BATADV_ATTR_MAX, genlmsg_attrdata(ghdr, 0),
- 		      genlmsg_len(ghdr), batadv_netlink_policy))
-+	{
-+		printf("nla_parse");
+ 		      genlmsg_len(ghdr), batadv_genl_policy))
  		return NL_OK;
-+	}
  
- 	if (batadv_nl_missing_attrs(attrs, parse_orig_list_mandatory,
- 				    ARRAY_SIZE(parse_orig_list_mandatory)))
-+	{
-+		printf("batadv_nl_missing_attrs");
- 		return NL_OK;
-+	}
- 
--	if (!attrs[BATADV_ATTR_FLAG_BEST])
+-	if (batadv_genl_missing_attrs(attrs, parse_orig_list_mandatory,
+-				      BATADV_ARRAY_SIZE(parse_orig_list_mandatory)))
 -		return NL_OK;
 -
+-	if (!attrs[BATADV_ATTR_FLAG_BEST])
++	if (batadv_genl_missing_attrs(attrs, parse_neigh_list_mandatory,
++				      BATADV_ARRAY_SIZE(parse_neigh_list_mandatory)))
+ 		return NL_OK;
+ 
 -	orig = nla_data(attrs[BATADV_ATTR_ORIG_ADDRESS]);
- 	dest = nla_data(attrs[BATADV_ATTR_NEIGH_ADDRESS]);
+-	dest = nla_data(attrs[BATADV_ATTR_NEIGH_ADDRESS]);
 -	tq = nla_get_u8(attrs[BATADV_ATTR_TQ]);
++	neigh = nla_data(attrs[BATADV_ATTR_NEIGH_ADDRESS]);
 +	throughput = nla_get_u32(attrs[BATADV_ATTR_THROUGHPUT]);
  	hardif = nla_get_u32(attrs[BATADV_ATTR_HARD_IFINDEX]);
  	lastseen = nla_get_u32(attrs[BATADV_ATTR_LAST_SEEN_MSECS]);
@@ -69,241 +63,66 @@ index 60df1523..f68ba386 100644
 -		return NL_OK;
 -
  	ifname = if_indextoname(hardif, ifname_buf);
--	if (!ifname)
-+	if (!ifname) {
-+		printf("!ifname");
+ 	if (!ifname)
  		return NL_OK;
-+	}
  
  	sprintf(mac1, "%02x:%02x:%02x:%02x:%02x:%02x",
 -		orig[0], orig[1], orig[2], orig[3], orig[4], orig[5]);
-+		dest[0], dest[1], dest[2], dest[3], dest[4], dest[5]);
++		neigh[0], neigh[1], neigh[2], neigh[3], neigh[4], neigh[5]);
  
  	struct json_object *obj = json_object_new_object();
--	if (!obj)
-+	if (!obj) {
-+		printf("!obj");
- 		return NL_OK;
-+	}
- 
- 	struct json_object *interface;
- 	if (!json_object_object_get_ex(opts->interfaces, ifname, &interface)) {
-@@ -650,6 +656,8 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
+ 	if (!obj)
+@@ -655,6 +647,8 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
  		json_object_object_add(opts->interfaces, ifname, interface);
  	}
  
-+	tq = throughput >= gluonutil_get_pseudo_tq(throughput);
++	tq = gluonutil_get_pseudo_tq(throughput);
 +
  	json_object_object_add(obj, "tq", json_object_new_int(tq));
  	json_object_object_add(obj, "lastseen", json_object_new_double(lastseen / 1000.));
  	json_object_object_add(interface, mac1, obj);
-@@ -669,7 +677,7 @@ static struct json_object * get_batadv(void) {
+@@ -674,8 +668,8 @@ static struct json_object * get_batadv(void) {
  	if (!opts.interfaces)
  		return NULL;
  
--	ret = batadv_nl_query_common("bat0", BATADV_CMD_GET_ORIGINATORS,
-+	ret = batadv_nl_query_common("bat0", BATADV_CMD_GET_NEIGHBORS,
- 				     parse_orig_list_netlink_cb, NLM_F_DUMP,
- 				     &opts.query_opts);
+-	ret = batadv_genl_query("bat0", BATADV_CMD_GET_ORIGINATORS,
+-				parse_orig_list_netlink_cb, NLM_F_DUMP,
++	ret = batadv_genl_query("bat0", BATADV_CMD_GET_NEIGHBORS,
++				parse_neigh_list_netlink_cb, NLM_F_DUMP,
+ 				&opts.query_opts);
  	if (ret < 0) {
-diff --git a/package/gluon-status-page-api/src/batadv-netlink.c b/package/gluon-status-page-api/src/batadv-netlink.c
-index ca965d48..37e60d2b 100644
---- a/package/gluon-status-page-api/src/batadv-netlink.c
-+++ b/package/gluon-status-page-api/src/batadv-netlink.c
-@@ -50,7 +50,7 @@ struct nla_policy batadv_netlink_policy[NUM_BATADV_ATTR] = {
- 	[BATADV_ATTR_NEIGH_ADDRESS]	= { .type = NLA_UNSPEC,
- 					    .minlen = ETH_ALEN,
- 					    .maxlen = ETH_ALEN },
--	[BATADV_ATTR_TQ]		= { .type = NLA_U8 },
-+	[BATADV_ATTR_THROUGHPUT]	= { .type = NLA_U32 },
- };
- 
- static int nlquery_error_cb(struct sockaddr_nl *nla __maybe_unused,
-diff --git a/package/gluon-status-page-api/src/neighbours-batadv.c b/package/gluon-status-page-api/src/neighbours-batadv.c
-index 7d5d0211..a68f6ae9 100644
---- a/package/gluon-status-page-api/src/neighbours-batadv.c
-+++ b/package/gluon-status-page-api/src/neighbours-batadv.c
-@@ -15,9 +15,8 @@ struct neigh_netlink_opts {
- };
- 
- static const enum batadv_nl_attrs parse_orig_list_mandatory[] = {
--  BATADV_ATTR_ORIG_ADDRESS,
-   BATADV_ATTR_NEIGH_ADDRESS,
--  BATADV_ATTR_TQ,
-+  BATADV_ATTR_THROUGHPUT,
-   BATADV_ATTR_HARD_IFINDEX,
-   BATADV_ATTR_LAST_SEEN_MSECS,
- };
-@@ -28,9 +27,8 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
-   struct nlmsghdr *nlh = nlmsg_hdr(msg);
-   struct batadv_nlquery_opts *query_opts = arg;
-   struct genlmsghdr *ghdr;
--  uint8_t *orig;
-   uint8_t *dest;
--  uint8_t tq;
-+  uint32_t throughput;
-   uint32_t hardif;
-   uint32_t lastseen;
-   char ifname_buf[IF_NAMESIZE], *ifname;
-@@ -39,46 +37,53 @@ static int parse_orig_list_netlink_cb(struct nl_msg *msg, void *arg)
- 
-   opts = container_of(query_opts, struct neigh_netlink_opts, query_opts);
- 
--  if (!genlmsg_valid_hdr(nlh, 0))
--    return NL_OK;
-+  if (!genlmsg_valid_hdr(nlh, 0)) {
-+	 printf("!genlmsg_valid_hdr");
-+	 return NL_OK;
-+  }
- 
-   ghdr = nlmsg_data(nlh);
- 
--  if (ghdr->cmd != BATADV_CMD_GET_ORIGINATORS)
--    return NL_OK;
-+  if (ghdr->cmd != BATADV_CMD_GET_NEIGHBORS) {
-+	  printf("!BATADV_CMD_GET_NEIGHBORS");
-+	  return NL_OK;
-+  }
- 
-   if (nla_parse(attrs, BATADV_ATTR_MAX, genlmsg_attrdata(ghdr, 0),
-         genlmsg_len(ghdr), batadv_netlink_policy))
--    return NL_OK;
-+  {
-+	  printf("nla_parse");
-+	  return NL_OK;
-+  }
- 
-   if (batadv_nl_missing_attrs(attrs, parse_orig_list_mandatory,
-               ARRAY_SIZE(parse_orig_list_mandatory)))
--    return NL_OK;
--
--  if (!attrs[BATADV_ATTR_FLAG_BEST])
--    return NL_OK;
-+  {
-+	  printf("batadv_nl_missing_attrs");
-+	  return NL_OK;
-+  }
- 
--  orig = nla_data(attrs[BATADV_ATTR_ORIG_ADDRESS]);
-   dest = nla_data(attrs[BATADV_ATTR_NEIGH_ADDRESS]);
--  tq = nla_get_u8(attrs[BATADV_ATTR_TQ]);
-+  throughput = nla_get_u32(attrs[BATADV_ATTR_THROUGHPUT]);
-   hardif = nla_get_u32(attrs[BATADV_ATTR_HARD_IFINDEX]);
-   lastseen = nla_get_u32(attrs[BATADV_ATTR_LAST_SEEN_MSECS]);
- 
--  if (memcmp(orig, dest, 6) != 0)
--    return NL_OK;
--
-   ifname = if_indextoname(hardif, ifname_buf);
--  if (!ifname)
--    return NL_OK;
-+  if (!ifname) {
-+	  printf("!ifname");
-+	  return NL_OK;
-+  }
- 
-   sprintf(mac1, "%02x:%02x:%02x:%02x:%02x:%02x",
--          orig[0], orig[1], orig[2], orig[3], orig[4], orig[5]);
-+          dest[0], dest[1], dest[2], dest[3], dest[4], dest[5]);
- 
-   struct json_object *neigh = json_object_new_object();
--  if (!neigh)
--    return NL_OK;
-+  if (!neigh) {
-+	  printf("!neigh");
-+	  return NL_OK;
-+  }
- 
--  json_object_object_add(neigh, "tq", json_object_new_int(tq));
-+  json_object_object_add(neigh, "tp", json_object_new_int(throughput));
-   json_object_object_add(neigh, "lastseen", json_object_new_double(lastseen / 1000.));
-   json_object_object_add(neigh, "ifname", json_object_new_string(ifname));
- 
-@@ -99,7 +104,7 @@ static json_object *neighbours(void) {
-   if (!opts.obj)
-     return NULL;
- 
--  ret = batadv_nl_query_common("bat0", BATADV_CMD_GET_ORIGINATORS,
-+  ret = batadv_nl_query_common("bat0", BATADV_CMD_GET_NEIGHBORS,
-                                parse_orig_list_netlink_cb, NLM_F_DUMP,
-                                &opts.query_opts);
-   if (ret < 0) {
-diff --git a/package/gluon-status-page/src/js/lib/gui/neighbours.js b/package/gluon-status-page/src/js/lib/gui/neighbours.js
-index f6ce9e42..8fa4d794 100644
---- a/package/gluon-status-page/src/js/lib/gui/neighbours.js
-+++ b/package/gluon-status-page/src/js/lib/gui/neighbours.js
-@@ -34,7 +34,7 @@ function (Helper, SignalGraph, Signal) {
-     var el = parent.insertRow()
- 
-     var tdHostname = el.insertCell()
--    var tdTQ = el.insertCell()
-+    var tdTP = el.insertCell()
-     var tdSignal = el.insertCell()
-     var tdDistance = el.insertCell()
-     var tdInactive = el.insertCell()
-@@ -78,10 +78,10 @@ function (Helper, SignalGraph, Signal) {
-         tdInactive.textContent = Math.round(inactive / 1000) + " s"
-       }
- 
--      if ("batadv" in d)
--        tdTQ.textContent = Math.round(d.batadv.tq / 2.55) + " %"
-+      if ("batadv" in d && "tp" in d.batadv)
-+        tdTP.textContent = d.batadv.tp > 1999 ? Math.round(d.batadv.tp / 1000) + "M" : d.batadv.tp + "k"
-       else
--        tdTQ.textContent = "‒"
-+        tdTP.textContent = "‒"
- 
-       if (infoSet)
-         return
-@@ -136,7 +136,7 @@ function (Helper, SignalGraph, Signal) {
-     tr.appendChild(th)
- 
-     th = document.createElement("th")
--    th.textContent = "TQ"
-+    th.textContent = "bit/s"
-     tr.appendChild(th)
- 
-     th = document.createElement("th")
+ 		json_object_put(opts.interfaces);
 diff --git a/package/libgluonutil/src/libgluonutil.c b/package/libgluonutil/src/libgluonutil.c
-index 5932c544..adaaf5bb 100644
+index 0f4bfe4a..d0a11e33 100644
 --- a/package/libgluonutil/src/libgluonutil.c
 +++ b/package/libgluonutil/src/libgluonutil.c
-@@ -31,6 +31,7 @@
- #include <stdio.h>
+@@ -33,6 +33,7 @@
  #include <string.h>
  #include <stdlib.h>
+ #include <unistd.h>
 +#include <math.h>
  
- 
- char * gluonutil_read_line(const char *filename) {
-@@ -112,3 +113,12 @@ struct json_object * gluonutil_wrap_and_free_string(char *str) {
- struct json_object * gluonutil_load_site_config(void) {
- 	return json_object_from_file("/lib/gluon/site.json");
+ /**
+  * Merges two JSON objects
+@@ -246,3 +247,12 @@ err:
+ 	free(domain_code);
+ 	return NULL;
  }
 +
 +uint8_t gluonutil_get_pseudo_tq(uint32_t throughput) {
-+        return throughput >= 54000 ? 255 :
-+            throughput < 417 ? 0 :
-+            (uint8_t)((1.42459274279287898080 *
-+		       log2(throughput) -
-+		       12.39555493934044793479) *
-+		      25.5);
++	return throughput >= 54000 ? 255 :
++		throughput < 417 ? 0 :
++		(uint8_t)((1.42459274279287898080 *
++			  log2(throughput) -
++			  12.39555493934044793479) *
++			 25.5);
 +}
 diff --git a/package/libgluonutil/src/libgluonutil.h b/package/libgluonutil/src/libgluonutil.h
-index 96195281..5d6210e1 100644
+index 39b253ba..2ca171be 100644
 --- a/package/libgluonutil/src/libgluonutil.h
 +++ b/package/libgluonutil/src/libgluonutil.h
-@@ -27,6 +27,8 @@
- #ifndef _LIBGLUON_LIBGLUON_H_
- #define _LIBGLUON_LIBGLUON_H_
- 
-+#include <stdint.h>
-+
- char * gluonutil_read_line(const char *filename);
- char * gluonutil_get_sysconfig(const char *key);
- char * gluonutil_get_node_id(void);
-@@ -37,4 +39,6 @@ struct json_object * gluonutil_wrap_and_free_string(char *str);
- 
+@@ -44,4 +44,6 @@ bool gluonutil_has_domains(void);
+ char * gluonutil_get_domain(void);
  struct json_object * gluonutil_load_site_config(void);
  
 +uint8_t gluonutil_get_pseudo_tq(uint32_t throughput);

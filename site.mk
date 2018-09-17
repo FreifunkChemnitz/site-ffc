@@ -16,11 +16,12 @@ GLUON_SITE_PACKAGES := \
         gluon-web-admin \
         gluon-web-autoupdater \
         gluon-web-network \
-	gluon-web-node-role \
+	    gluon-web-node-role \
         gluon-web-wifi-config \
         gluon-mesh-vpn-fastd \
         gluon-radvd \
         gluon-status-page \
+        gluon-status-page-mesh-batman-adv \
         iwinfo \
         iptables \
         haveged
@@ -35,6 +36,7 @@ endif
 
 ifeq ($(FLASH_4MB),false)
 GLUON_SITE_PACKAGES += \
+    pciutils \
 	comgt \
 	ppp \
 	kmod-fs-ext4 \
@@ -53,6 +55,7 @@ endif
 
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
+    kmod-phy-broadcom \
 	qemu-ga
 endif
 

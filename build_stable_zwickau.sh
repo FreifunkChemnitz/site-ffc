@@ -21,8 +21,8 @@
 BRANCH="stable"
 STABLE_TARGETS="ar71xx-generic ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic ramips-mt7621 sunxi"
 TARGETS="$STABLE_TARGETS"
-GLUON_RELEASE="b"$(date '+%Y%m%d')"z-★" # unused stable release symbols: ♟♞♝♜♛♚🗲™⚑♫⛾⛭🖬♙♘♗♖♕♔♧♤♡♢  / used: ★
-THREADS=$(expr $(nproc) + 1)
+GLUON_RELEASE="b"$(date '+%Y%m%d')"s-z"
+THREADS=$(( 2 * $(nproc) ))
 
 RETCODE="0"
 

@@ -22,8 +22,8 @@ BRANCH="experimental"
 STABLE_TARGETS="ar71xx-generic ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic ramips-mt7621 sunxi"
 BROKEN_TARGETS="ar71xx-mikrotik ipq806x mvebu ramips-mt7628 ramips-rt305x brcm2708-bcm2710"
 TARGETS="$STABLE_TARGETS $BROKEN_TARGETS"
-GLUON_RELEASE="b"$(date '+%Y%m%d')"z"
-THREADS=$(expr $(nproc) + 1)
+GLUON_RELEASE="b"$(date '+%Y%m%d')"e-z"
+THREADS=$(( 2 * $(nproc) ))
 
 RETCODE="0"
 

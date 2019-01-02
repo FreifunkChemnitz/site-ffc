@@ -19,8 +19,8 @@
 # SPDX-License-Identifier: AGPL-3.0
 
 BRANCH="experimental"
-STABLE_TARGETS="ar71xx-generic ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic ramips-mt7621 sunxi"
-BROKEN_TARGETS="ar71xx-mikrotik ipq806x mvebu ramips-mt7628 ramips-rt305x brcm2708-bcm2710"
+STABLE_TARGETS="ar71xx-generic ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic ramips-mt7621 sunxi-cortexa7"
+BROKEN_TARGETS="ar71xx-mikrotik ipq806x mvebu-cortexa9 ramips-mt76x8 ramips-rt305x brcm2708-bcm2710"
 TARGETS="$STABLE_TARGETS $BROKEN_TARGETS"
 GLUON_RELEASE="b"$(date '+%Y%m%d')"e-z"
 THREADS=$(( 2 * $(nproc) ))
@@ -35,7 +35,7 @@ for TARGET in $TARGETS; do
 	CURRENTRET=$?
 	RETCODE=$[ $RETCODE + $CURRENTRET ]
 	if [ $CURRENTRET -ne "0" ]; then
-		echo $(date -Isecond)" could not build $TARGET" >> build.messages
+		echo $(date -Isecond)" could not build $TARGET" >> ./.msg/build.messages
 	fi
 done
 echo -n "finished: "; date
@@ -50,4 +50,6 @@ mkdir /var/www/html/zwickau/$BRANCH/ 2> /dev/null || touch /var/www/html/zwickau
 cp -r ../output/images/* /var/www/html/zwickau/$BRANCH/
 echo "################################ sign manifest ################################"
 ../contrib/sign.sh /home/buildbot/keys/key.secret /var/www/html/zwickau/$BRANCH/sysupgrade/$BRANCH.manifest
-
+echo "################################ sync to cloud ################################"
+rsync -alv --delete -e ssh /var/www/html/zwickau/$BRANCH/ buildbot@lavinia:/mnt/datahdd/ffz/firmware/zwickau/$BRANCH/
+rsync -av --delete -e ssh ./.msg/ buildbot@lavinia:/mnt/datahdd/ffz/firmware/zwickau/$BRANCH/.msg/

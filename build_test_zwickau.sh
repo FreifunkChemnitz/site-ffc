@@ -18,10 +18,11 @@
 #
 # SPDX-License-Identifier: AGPL-3.0
 
-BRANCH="stable"
+BRANCH="test"
 STABLE_TARGETS="ar71xx-generic ar71xx-tiny x86-generic x86-geode x86-64 ar71xx-nand mpc85xx-generic ramips-mt7621 sunxi-cortexa7"
-TARGETS="$STABLE_TARGETS"
-GLUON_RELEASE="b"$(date '+%Y%m%d')"s-z"
+BROKEN_TARGETS="ar71xx-mikrotik ipq806x mvebu-cortexa9 ramips-mt76x8 ramips-rt305x brcm2708-bcm2710"
+TARGETS="$STABLE_TARGETS $BROKEN_TARGETS"
+GLUON_RELEASE="b"$(date '+%Y%m%d')"e-z"
 THREADS=$(( 2 * $(nproc) ))
 
 RETCODE="0"

@@ -1,30 +1,21 @@
+GLUON_FEATURES := \
+	autoupdater \
+  config-mode-geo-location-osm \
+	ebtables-filter-multicast \
+	ebtables-filter-ra-dhcp \
+	ebtables-limit-arp \
+	mesh-batman-adv-15 \
+	mesh-vpn-fastd \
+	radvd \
+	respondd \
+	status-page \
+	web-advanced \
+	web-wizard \
+  web-osm
+
 GLUON_SITE_PACKAGES := \
-        gluon-mesh-batman-adv-15 \
-        gluon-alfred \
-        gluon-respondd \
-        gluon-autoupdater \
-        gluon-setup-mode \
-        gluon-config-mode-core \
-        gluon-config-mode-hostname \
-        gluon-config-mode-mesh-vpn \
-        gluon-config-mode-geo-location \
-        gluon-config-mode-contact-info \
-        gluon-config-mode-domain-select \
-        gluon-ebtables-filter-multicast \
-        gluon-ebtables-filter-ra-dhcp \
-        gluon-authorized-keys \
-        gluon-web-admin \
-        gluon-web-autoupdater \
-        gluon-web-network \
-	    gluon-web-node-role \
-        gluon-web-wifi-config \
-        gluon-mesh-vpn-fastd \
-        gluon-radvd \
-        gluon-status-page \
-        gluon-status-page-mesh-batman-adv \
-        iwinfo \
-        iptables \
-        haveged
+	iwinfo \
+	haveged
 
 FLASH_4MB := false
 ifeq ($(GLUON_TARGET),ar71xx-tiny)
@@ -36,7 +27,7 @@ endif
 
 ifeq ($(FLASH_4MB),false)
 GLUON_SITE_PACKAGES += \
-    pciutils \
+  pciutils \
 	comgt \
 	ppp \
 	kmod-fs-ext4 \
@@ -55,7 +46,7 @@ endif
 
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
-    kmod-phy-broadcom \
+  kmod-phy-broadcom \
 	qemu-ga
 endif
 

@@ -1,29 +1,22 @@
+GLUON_FEATURES := \
+	alfred \
+	autoupdater \
+	config-mode-geo-location-osm \
+	ebtables-filter-multicast \
+	ebtables-filter-ra-dhcp \
+	ebtables-limit-arp \
+	mesh-batman-adv-15 \
+	mesh-vpn-fastd \
+	radvd \
+	respondd \
+	status-page \
+	web-advanced \
+	web-wizard \
+	web-osm
+
 GLUON_SITE_PACKAGES := \
-        gluon-mesh-batman-adv-15 \
-        gluon-alfred \
-        gluon-respondd \
-        gluon-autoupdater \
-        gluon-setup-mode \
-        gluon-config-mode-core \
-        gluon-config-mode-hostname \
-        gluon-config-mode-mesh-vpn \
-        gluon-config-mode-geo-location \
-        gluon-config-mode-contact-info \
-        gluon-ebtables-filter-multicast \
-        gluon-ebtables-filter-ra-dhcp \
-        gluon-authorized-keys \
-        gluon-web-admin \
-        gluon-web-autoupdater \
-        gluon-web-network \
-	gluon-web-node-role \
-	gluon-web-wifi-config \
-        gluon-mesh-vpn-fastd \
-        gluon-radvd \
-        gluon-status-page \
-        gluon-status-page-mesh-batman-adv \
-        iwinfo \
-        iptables \
-        haveged \
+	iwinfo \
+	haveged \
 	wodca
 
 FLASH_4MB := false
@@ -36,12 +29,13 @@ endif
 
 ifeq ($(FLASH_4MB),false)
 GLUON_SITE_PACKAGES += \
+  pciutils \
 	comgt \
 	ppp \
 	kmod-fs-ext4 \
 	kmod-nls-utf8 \
-        kmod-usb2 \
-        kmod-usb-hid \
+	kmod-usb2 \
+	kmod-usb-hid \
 	kmod-usb-net \
 	kmod-usb-net-asix \
 	kmod-usb-net-cdc-ether \
@@ -54,12 +48,13 @@ endif
 
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
+	kmod-phy-broadcom \
 	qemu-ga
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')
 
-GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)
+GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)-z
 
 GLUON_PRIORITY ?= 3
 

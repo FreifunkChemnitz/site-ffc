@@ -29,6 +29,11 @@ RETCODE="0"
 
 rm ../output/images/factory/* ../output/images/sysupgrade/*
 start=$(date +%s)
+if [ ! -d .msg/ ]; then
+	mkdir .msg/
+else
+	rm .msg/*
+fi
 for TARGET in $TARGETS; do
 	echo "################# $(date) start building target $TARGET ###########################"
 	make -C ../ -j$THREADS GLUON_RELEASE=$GLUON_RELEASE GLUON_TARGET=$TARGET GLUON_BRANCH=$BRANCH BROKEN=1

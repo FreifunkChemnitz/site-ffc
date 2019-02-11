@@ -14,6 +14,7 @@ GLUON_FEATURES := \
   web-osm
 
 GLUON_SITE_PACKAGES := \
+	gluon-authorized-keys \
 	iwinfo \
 	haveged
 

@@ -1,4 +1,5 @@
 GLUON_FEATURES := \
+	authorized-keys \
 	autoupdater \
 	config-mode-domain-select \
 	config-mode-geo-location-osm \
@@ -15,7 +16,6 @@ GLUON_FEATURES := \
   web-osm
 
 GLUON_SITE_PACKAGES := \
-	gluon-authorized-keys \
 	iwinfo \
 	haveged
 

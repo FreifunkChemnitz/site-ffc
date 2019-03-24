@@ -12,6 +12,7 @@ GLUON_FEATURES := \
 	respondd \
 	status-page \
 	web-advanced \
+	web-node-role \
 	web-wizard \
   web-osm
 

@@ -40,6 +40,7 @@ GLUON_SITE_PACKAGES += \
 	kmod-usb-net \
 	kmod-usb-net-asix \
 	kmod-usb-net-cdc-ether \
+	kmod-usb-net-rtl8152 \
 	kmod-usb-serial \
 	kmod-usb-serial-option \
 	kmod-usb-serial-wwan \

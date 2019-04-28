@@ -1,4 +1,4 @@
 GLUON_SITE_FEEDS="ffzw"
-PACKAGES_FFZW_REPO=https://gitlab.com/FreifunkZwickau/ffzw-packages.git
-PACKAGES_FFZW_COMMIT=3b48b6899e0a08f0e44d99195d5b19cf545c573e
-PACKAGES_FFZW_BRANCH=gluon-2017
+PACKAGES_FFZW_REPO=https://gitlab.com/FreifunkChemnitz/packages.git
+PACKAGES_FFZW_COMMIT=cb7a9b4f338825cbe754059930fc073286d7515c
+PACKAGES_FFZW_BRANCH=master

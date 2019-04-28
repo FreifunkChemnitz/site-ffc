@@ -1,7 +1,7 @@
 GLUON_FEATURES := \
 	alfred \
 	autoupdater \
-	config-mode-geo-location-osm \
+	config-mode-geo-location \
 	ebtables-filter-multicast \
 	ebtables-filter-ra-dhcp \
 	ebtables-limit-arp \
@@ -12,8 +12,7 @@ GLUON_FEATURES := \
 	respondd \
 	status-page \
 	web-advanced \
-	web-wizard \
-	web-osm
+	web-wizard
 
 GLUON_SITE_PACKAGES := \
 	iwinfo \

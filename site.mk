@@ -51,8 +51,13 @@ endif
 
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
-  kmod-phy-broadcom \
+	kmod-phy-broadcom \
 	qemu-ga
+endif
+
+ifeq ($(GLUON_TARGET),x86-generic)
+GLUON_SITE_PACKAGES += \
+	kmod-phy-broadcom
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')

@@ -38,15 +38,19 @@ GLUON_SITE_PACKAGES += \
 	ppp \
 	kmod-fs-ext4 \
 	kmod-nls-utf8 \
+        kmod-phy-broadcom \
+        kmod-skge \
     kmod-usb2 \
     kmod-usb-hid
 	kmod-usb-net \
 	kmod-usb-net-asix \
 	kmod-usb-net-cdc-ether \
+        kmod-usb-net-rtl8152 \
 	kmod-usb-serial \
 	kmod-usb-serial-option \
 	kmod-usb-serial-wwan \
 	kmod-usb-storage
+        usbutils \
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')

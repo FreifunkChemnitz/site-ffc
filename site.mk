@@ -41,7 +41,7 @@ GLUON_SITE_PACKAGES += \
         kmod-phy-broadcom \
         kmod-skge \
     kmod-usb2 \
-    kmod-usb-hid
+    kmod-usb-hid \
 	kmod-usb-net \
 	kmod-usb-net-asix \
 	kmod-usb-net-cdc-ether \
@@ -49,8 +49,8 @@ GLUON_SITE_PACKAGES += \
 	kmod-usb-serial \
 	kmod-usb-serial-option \
 	kmod-usb-serial-wwan \
-	kmod-usb-storage
-        usbutils \
+	kmod-usb-storage \
+        usbutils
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')

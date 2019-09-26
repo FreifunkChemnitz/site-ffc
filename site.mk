@@ -25,7 +25,7 @@ GLUON_SITE_PACKAGES := \
 	haveged
 
 FLASH_4MB := false
-ifeq ($(GLUON_TARGET),ar71xx-tiny)
+ifeq ($(GLUON_TARGET),ar71xx-generic)
        FLASH_4MB := true
 endif
 ifeq ($(GLUON_TARGET),ramips-rt305x)

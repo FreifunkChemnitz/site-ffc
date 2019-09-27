@@ -39,7 +39,6 @@ GLUON_SITE_PACKAGES += \
 	kmod-fs-ext4 \
 	kmod-nls-utf8 \
         kmod-phy-broadcom \
-        kmod-skge \
     kmod-usb2 \
     kmod-usb-hid \
 	kmod-usb-net \

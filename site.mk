@@ -36,6 +36,8 @@ GLUON_SITE_PACKAGES += \
 	ppp \
 	kmod-fs-ext4 \
 	kmod-nls-utf8 \
+        kmod-phy-broadcom \
+        kmod-skge \
 	kmod-usb2 \
 	kmod-usb-hid \
 	kmod-usb-net \
@@ -54,15 +56,7 @@ endif
 
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
-	kmod-phy-broadcom \
-	kmod-skge \
 	qemu-ga
-endif
-
-ifeq ($(GLUON_TARGET),x86-generic)
-GLUON_SITE_PACKAGES += \
-	kmod-phy-broadcom \
-	kmod-skge
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')

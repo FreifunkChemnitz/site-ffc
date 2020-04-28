@@ -30,21 +30,20 @@ endif
 
 ifeq ($(FLASH_4MB),false)
 GLUON_SITE_PACKAGES += \
-        ath9k-htc-firmware \
-  pciutils \
+    ath9k-htc-firmware \
+    pciutils \
 	comgt \
 	ppp \
 	kmod-fs-ext4 \
 	kmod-nls-utf8 \
-        kmod-phy-broadcom \
-        kmod-skge \
+    kmod-phy-broadcom \
 	kmod-usb2 \
 	kmod-usb-hid \
 	kmod-usb-net \
 	kmod-usb-net-asix \
 	kmod-usb-net-cdc-ether \
-        kmod-usb-net-cdc-ncm \
-        kmod-usb-net-huawei-cdc-ncm \
+    kmod-usb-net-cdc-ncm \
+    kmod-usb-net-huawei-cdc-ncm \
 	kmod-usb-net-rtl8152 \
 	kmod-usb-serial \
 	kmod-usb-serial-option \
@@ -56,6 +55,7 @@ endif
 
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
+    kmod-skge \
 	qemu-ga
 endif
 

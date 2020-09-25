@@ -53,20 +53,14 @@ GLUON_SITE_PACKAGES += \
 	usbutils
 endif
 
+ifneq (,$(findstring x86,$(GLUON_TARGET)))
+GLUON_SITE_PACKAGES += \
+	kmod-skge
+endif
+
 ifeq ($(GLUON_TARGET),x86-64)
 GLUON_SITE_PACKAGES += \
-  kmod-skge \
 	qemu-ga
-endif
-
-ifeq ($(GLUON_TARGET),x86-generic)
-GLUON_SITE_PACKAGES += \
-	kmod-skge
-endif
-
-ifeq ($(GLUON_TARGET),x86-geode)
-GLUON_SITE_PACKAGES += \
-	kmod-skge
 endif
 
 DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')

@@ -17,8 +17,7 @@ GLUON_FEATURES := \
 	web-osm
 
 GLUON_SITE_PACKAGES := \
-	iwinfo \
-	haveged
+	iwinfo
 
 FLASH_4MB := false
 ifeq ($(GLUON_TARGET),ar71xx-tiny)

@@ -16,6 +16,10 @@ GLUON_FEATURES := \
 	web-wizard \
 	web-osm
 
+GLUON_FEATURES_tiny := \
+        -config-mode-geo-location-osm \
+        -web-osm
+
 GLUON_SITE_PACKAGES := \
 	iwinfo
 

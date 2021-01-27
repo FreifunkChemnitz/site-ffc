@@ -12,12 +12,14 @@ GLUON_FEATURES := \
 	respondd \
 	status-page \
 	web-advanced \
+	web-mesh-vpn-fastd \
 	web-node-role \
 	web-wizard \
 	web-osm
 
 GLUON_FEATURES_tiny := \
         -config-mode-geo-location-osm \
+	-web-mesh-vpn-fastd \
         -web-osm
 
 GLUON_SITE_PACKAGES := \

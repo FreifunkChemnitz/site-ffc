@@ -6,7 +6,7 @@ default:
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
-    - git checkout v2021.1
+    - git checkout v2021.1.1
     - ln -s ../site-ffc site
 
 stages:

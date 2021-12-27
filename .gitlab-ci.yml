@@ -1,5 +1,5 @@
 default:
-  image: debian:sid
+  image: debian:buster
   before_script:
     - apt-get update
     - apt-get -y install build-essential gawk git libncurses-dev lua-check python2 shellcheck time unzip wget
@@ -24,7 +24,6 @@ check-siteconf:
     - make lint-sh
 
 build-gluon:
-  image: debian:buster
   stage: build
   tags: [gluon]
   variables:

@@ -1,9 +1,9 @@
 default:
   image: debian:buster
   before_script:
-    - echo -e "\e[0Ksection_start:`date +%s`:preparation\r\e[0Kprepare build environment"
+    - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
-    - apt-get -y install build-essential gawk git libncurses-dev lua-check python2 shellcheck time unzip wget
+    - apt-get -y install build-essential curl gawk git libncurses-dev lua-check python2 shellcheck time unzip wget
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
@@ -37,3 +37,10 @@ build-gluon:
   script:
     - make update
     - make -j$(nproc || printf 2)
+    - mkdir ~/.ssh
+    - chmod 700 ~/.ssh
+    - wget "https://gitlab.com/gitlab-org/incubation-engineering/devops-for-mobile-apps/load-secure-files/-/raw/main/installer"
+    - bash installer
+    - echo "bequerel.chemnitz.freifunk.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJU8AcDfGLYaH6Yi0fL7Ddj5EK43JgrixJNIE/PAaFIm" > ~/.ssh/known_hosts
+    - sftp -4 -i .secure_files/id_ed25519 jenkins@bequerel.chemnitz.freifunk.net <<< "mkdir firmware/nightly/$(date --iso-8601=date)"
+    - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@bequerel.chemnitz.freifunk.net:~/firmware/nightly/$(date --iso-8601=date)

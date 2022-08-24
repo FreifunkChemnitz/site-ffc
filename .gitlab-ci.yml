@@ -1,6 +1,7 @@
 default:
   image: debian:buster
   before_script:
+    - echo -e "\e[0Ksection_start:`date +%s`:preparation\r\e[0Kprepare build environment"
     - apt-get update
     - apt-get -y install build-essential gawk git libncurses-dev lua-check python2 shellcheck time unzip wget
     - rm -rf ../gluon
@@ -8,6 +9,7 @@ default:
     - cd ../gluon
     - git checkout v2021.1.2
     - ln -s ../site-ffc site
+    - echo -e "\e[0Ksection_end:`date +%s`:preparation\r\e[0K"
 
 stages:
   - lint

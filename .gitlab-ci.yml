@@ -7,7 +7,7 @@ default:
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
-    - git checkout v2021.1.2
+    - git checkout v2022.1
     - ln -s ../site-ffc site
     - echo -e "\e[0Ksection_end:`date +%s`:preparation\r\e[0K"
 
@@ -33,7 +33,7 @@ build-gluon:
     FORCE_UNSAFE_CONFIGURE: 1
   parallel:
     matrix:
-      - GLUON_TARGET: [ar71xx-generic, ar71xx-tiny, ar71xx-nand, ath79-generic, brcm2708-bcm2708, brcm2708-bcm2709, ipq40xx-generic, ipq806x-generic, lantiq-xrx200, lantiq-xway, mpc85xx-generic, mpc85xx-p1020, ramips-mt7620, ramips-mt7621, ramips-mt76x8, ramips-rt305x, sunxi-cortexa7, x86-generic, x86-geode, x86-legacy, x86-64, ar71xx-mikrotik, brcm2708-bcm2710, mvebu-cortexa9]
+      - GLUON_TARGET: [ath79-generic, ath79-mikrotik, ath79-nand, brcm27xx-bcm2708, brcm27xx-bcm2709, brcm27xx-bcm2710, ipq40xx-generic, ipq40xx-mikrotik, ipq806x-generic, lantiq-xrx200, lantiq-xway, mediatek-mt7622, mpc85xx-p1010, mpc85xx-p1020, ramips-mt7620, ramips-mt7621, ramips-mt76x8, rockchip-armv8, sunxi-cortexa7, x86-generic, x86-geode, x86-legacy, x86-64, mvebu-cortexa9]
   script:
     - make update
     - make -j$(nproc || printf 2)

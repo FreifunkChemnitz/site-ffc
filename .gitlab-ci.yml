@@ -22,8 +22,8 @@ workflow:
 check-siteconf:
   stage: lint
   script:
-    - make lint-lua
-    - make lint-sh
+    - make lint-lua V=s
+    - make lint-sh V=s
 
 build-gluon:
   stage: build

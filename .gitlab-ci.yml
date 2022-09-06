@@ -3,7 +3,7 @@ default:
   before_script:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
-    - apt-get -y install build-essential curl gawk git libncurses-dev lua-check python2 shellcheck time unzip wget
+    - apt-get -y install build-essential curl gawk git libncurses-dev lua-check python3 shellcheck time unzip wget rsync subversion qemu-utils zlib1g-dev libssl-dev
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon

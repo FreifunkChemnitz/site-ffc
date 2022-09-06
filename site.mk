@@ -26,10 +26,7 @@ GLUON_SITE_PACKAGES := \
 	iwinfo
 
 FLASH_4MB := false
-ifeq ($(GLUON_TARGET),ar71xx-tiny)
-		FLASH_4MB := true
-endif
-ifeq ($(GLUON_TARGET),ramips-rt305x)
+ifeq ($(GLUON_TARGET),ath79-tiny)
 		FLASH_4MB := true
 endif
 

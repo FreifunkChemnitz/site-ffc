@@ -21,6 +21,7 @@ workflow:
 
 check-siteconf:
   stage: lint
+  when: manual
   script:
     - make lint-lua V=s
     - make lint-sh V=s

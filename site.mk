@@ -22,38 +22,7 @@ GLUON_FEATURES_tiny := \
 	-web-mesh-vpn-fastd \
         -web-osm
 
-GLUON_SITE_PACKAGES := \
-	iwinfo
-
-FLASH_4MB := false
-ifeq ($(GLUON_TARGET),ath79-tiny)
-		FLASH_4MB := true
-endif
-
-ifeq ($(FLASH_4MB),false)
-GLUON_SITE_PACKAGES += \
-	ath9k-htc-firmware \
-	pciutils \
-	comgt \
-	ppp \
-	kmod-fs-ext4 \
-	kmod-nls-utf8 \
-	kmod-phy-broadcom \
-	kmod-usb2 \
-	kmod-usb-hid \
-	kmod-usb-net \
-	kmod-usb-net-asix \
-	kmod-usb-net-cdc-ether \
-	kmod-usb-net-cdc-ncm \
-	kmod-usb-net-huawei-cdc-ncm \
-	kmod-usb-net-rtl8152 \
-	kmod-usb-serial \
-	kmod-usb-serial-option \
-	kmod-usb-serial-wwan \
-	kmod-usb-storage \
-	respondd-module-airtime \
-	usbutils
-endif
+GLUON_SITE_PACKAGES := iwinfo
 
 ifneq (,$(findstring x86,$(GLUON_TARGET)))
 GLUON_SITE_PACKAGES += \

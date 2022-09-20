@@ -5,7 +5,7 @@ from collections import defaultdict
 from jinja2 import Template
 
 # path to your gluon checkout, will be used to find targets and devices
-GLUON_DIR = '/home/hexa/git/gluon/master/'
+GLUON_DIR = '/home/nemesis/git/gluon/'
 
 
 class PackageList:

@@ -20,8 +20,8 @@ workflow:
     - if: '$CI_COMMIT_BRANCH != "$CI_DEFAULT_BRANCH"'
 
 check-siteconf:
+  image: debian:sid
   stage: lint
-  when: manual
   script:
     - make lint-lua V=s
     - make lint-sh V=s

@@ -3,11 +3,11 @@ default:
   before_script:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
-    - apt-get -y install build-essential curl gawk git libncurses-dev lua-check python3 shellcheck time unzip wget rsync subversion qemu-utils zlib1g-dev libssl-dev
+    - apt-get -y install build-essential curl gawk git libncurses-dev lua-check python2 python3 shellcheck time unzip wget rsync subversion qemu-utils zlib1g-dev libssl-dev
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
-    - git checkout v2022.1.1
+    - git checkout v2020.1.x
     - ln -s ../site-ffc site
     - echo -e "\e[0Ksection_end:`date +%s`:preparation\r\e[0K"
 
@@ -20,7 +20,7 @@ workflow:
     - if: '$CI_COMMIT_BRANCH != "$CI_DEFAULT_BRANCH"'
 
 check-siteconf:
-  image: debian:sid
+  image: debian:buster
   stage: lint
   script:
     - make lint-lua V=s
@@ -34,10 +34,10 @@ build-gluon:
     FORCE_UNSAFE_CONFIGURE: 1
   parallel:
     matrix:
-      - GLUON_TARGET: [ath79-generic, ath79-mikrotik, ath79-nand, bcm27xx-bcm2708, bcm27xx-bcm2709, bcm27xx-bcm2710, ipq40xx-generic, ipq40xx-mikrotik, ipq806x-generic, lantiq-xrx200, lantiq-xway, mediatek-mt7622, mpc85xx-p1010, mpc85xx-p1020, ramips-mt7620, ramips-mt7621, ramips-mt76x8, rockchip-armv8, sunxi-cortexa7, x86-generic, x86-geode, x86-legacy, x86-64, mvebu-cortexa9]
+      - GLUON_TARGET: [ar71xx-generic, ar71xx-tiny, ar71xx-nand, ath79-generic, brcm2708-bcm2708, brcm2708-bcm2709, ipq40xx-generic, ipq806x-generic, lantiq-xrx200, lantiq-xway, mpc85xx-generic, mpc85xx-p1020, ramips-mt7620, ramips-mt7621, ramips-mt76x8, ramips-rt305x, sunxi-cortexa7, x86-generic, x86-geode, x86-64, ar71xx-mikrotik, brcm2708-bcm2710, mvebu-cortexa9]
   script:
     - make update
-    - make -j$(nproc || printf 2)
+    - GLUON_RELEASE=b20201027+rly$(date '+%Y%m%d')-multi make -j$(nproc || printf 2)
     - mkdir ~/.ssh
     - chmod 700 ~/.ssh
     - wget "https://gitlab.com/gitlab-org/incubation-engineering/devops-for-mobile-apps/load-secure-files/-/raw/main/installer"

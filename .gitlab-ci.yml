@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Unlicense
+# SPDX-FileCopyrightText: 2022 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
+---
 default:
   image: debian:buster
   before_script:
@@ -32,12 +35,10 @@ build-gluon:
   variables:
     BROKEN: 1
     FORCE_UNSAFE_CONFIGURE: 1
-  parallel:
-    matrix:
-      - GLUON_TARGET: [ath79-generic, ath79-mikrotik, ath79-nand, bcm27xx-bcm2708, bcm27xx-bcm2709, bcm27xx-bcm2710, ipq40xx-generic, ipq40xx-mikrotik, ipq806x-generic, lantiq-xrx200, lantiq-xway, mediatek-mt7622, mpc85xx-p1010, mpc85xx-p1020, ramips-mt7620, ramips-mt7621, ramips-mt76x8, rockchip-armv8, sunxi-cortexa7, x86-generic, x86-geode, x86-legacy, x86-64, mvebu-cortexa9]
   script:
     - make update
-    - make -j$(nproc || printf 2)
+    - for target in $(make list-targets); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
+    - make manifest
     - mkdir ~/.ssh
     - chmod 700 ~/.ssh
     - wget "https://gitlab.com/gitlab-org/incubation-engineering/devops-for-mobile-apps/load-secure-files/-/raw/main/installer"

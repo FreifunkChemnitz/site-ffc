@@ -37,6 +37,7 @@ build-gluon:
     FORCE_UNSAFE_CONFIGURE: 1
   script:
     - make update
+    - export DEFAULT_GLUON_RELEASE="b$(date '+%Y%m%d')"
     - for target in $(make list-targets); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
     - make manifest
     - mkdir ~/.ssh

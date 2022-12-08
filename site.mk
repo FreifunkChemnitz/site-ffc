@@ -24,9 +24,6 @@ GLUON_SITE_PACKAGES := \
 	iwinfo \
 	respondd-module-airtime
 
-
-DEFAULT_GLUON_RELEASE := b$(shell date '+%Y%m%d')
-
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)-multi
 
 GLUON_AUTOUPDATER_BRANCH ?= stable

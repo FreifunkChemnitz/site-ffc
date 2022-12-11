@@ -186,6 +186,7 @@ PKGS_PCI = PackageList('PCI', ['pciutils'])
 pkglists.append(PKGS_PCI)
 
 PKGS_PCI_NET = PackageList('PCI_NET', [
+    'kmod-phy-broadcom' #Broacom BCM5411, BCM5421, BCM5461, BCM5464, BCM5481, BCM5482 and BCM57780 PHYs.
     'kmod-bnx2'  # Broadcom NetExtreme BCM5706/5708/5709/5716
 ])
 pkglists.append(PKGS_PCI_NET)

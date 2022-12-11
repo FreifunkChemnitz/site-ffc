@@ -141,6 +141,7 @@ EXCLUDE_PCI := \
     -pciutils
 
 INCLUDE_PCI_NET := \
+    kmod-phy-broadcom \
     kmod-bnx2
 
 EXCLUDE_PCI_NET := \

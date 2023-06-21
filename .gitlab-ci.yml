@@ -44,6 +44,6 @@ build-gluon:
     - chmod 700 ~/.ssh
     - wget "https://gitlab.com/gitlab-org/incubation-engineering/devops-for-mobile-apps/load-secure-files/-/raw/main/installer"
     - bash installer
-    - echo "bequerel.chemnitz.freifunk.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJU8AcDfGLYaH6Yi0fL7Ddj5EK43JgrixJNIE/PAaFIm" > ~/.ssh/known_hosts
-    - sftp -4 -i .secure_files/id_ed25519 jenkins@bequerel.chemnitz.freifunk.net <<< "mkdir firmware/nightly/$(date --iso-8601=date)"
-    - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@bequerel.chemnitz.freifunk.net:~/firmware/nightly/$(date --iso-8601=date)
+    - echo "becquerel.chemnitz.freifunk.net ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJU8AcDfGLYaH6Yi0fL7Ddj5EK43JgrixJNIE/PAaFIm" > ~/.ssh/known_hosts
+    - sftp -4 -i .secure_files/id_ed25519 jenkins@becquerel.chemnitz.freifunk.net <<< "mkdir firmware/nightly/$(date --iso-8601=date)"
+    - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@becquerel.chemnitz.freifunk.net:~/firmware/nightly/$(date --iso-8601=date)

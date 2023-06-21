@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: ???
+# SPDX-FileCopyrightText: ???
+# Where was this software copied from?
+
 import os
 from collections import defaultdict
 
 from jinja2 import Template
 
 # path to your gluon checkout, will be used to find targets and devices
-GLUON_DIR = '/home/nemesis/git/gluon/'
-
+GLUON_DIR = '/home/cwnemtjp/git/gluon/'
 
 class PackageList:
     def __init__(self, name: str, pkgs: list):

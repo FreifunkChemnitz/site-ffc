@@ -1,3 +1,6 @@
+# SPDX-License-Identifier: Unlicense
+# SPDX-FileCopyrightText: 2023 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
+
 GLUON_FEATURES := \
 	authorized-keys \
 	autoupdater \

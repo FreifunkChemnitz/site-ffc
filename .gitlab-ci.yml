@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: Unlicense
-# SPDX-FileCopyrightText: 2022 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
+# SPDX-FileCopyrightText: 2023 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
 ---
 default:
   image: debian:buster

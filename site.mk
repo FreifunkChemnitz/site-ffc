@@ -25,7 +25,8 @@ GLUON_FEATURES := \
 
 GLUON_SITE_PACKAGES := \
 	iwinfo \
-	respondd-module-airtime
+	respondd-module-airtime\
+    -dsl-vrx200-firmware-xdsl
 
 GLUON_RELEASE ?= $(DEFAULT_GLUON_RELEASE)-multi
 

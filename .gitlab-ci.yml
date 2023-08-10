@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2023 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
 ---
 default:
-  image: debian:buster
+  image: debian:bookworm-slim
   before_script:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update

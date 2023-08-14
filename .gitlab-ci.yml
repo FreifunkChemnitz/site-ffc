@@ -38,7 +38,7 @@ build-gluon:
   script:
     - make update
     - export DEFAULT_GLUON_RELEASE="b$(date '+%Y%m%d')"
-    - for target in $(make list-targets); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
+    - for target in $(make list-targets | sed '/lantiq-xrx200/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
     - make manifest
     - mkdir ~/.ssh
     - chmod 700 ~/.ssh

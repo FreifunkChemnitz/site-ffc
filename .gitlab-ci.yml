@@ -10,7 +10,7 @@ default:
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
-    - git checkout v2023.1
+    - git checkout v2022.1.4
     - ln -s ../site-ffc site
     - echo -e "\e[0Ksection_end:`date +%s`:preparation\r\e[0K"
 
@@ -38,8 +38,10 @@ build-gluon:
   script:
     - make update
     - export DEFAULT_GLUON_RELEASE="b$(date '+%Y%m%d')"
-    - for target in $(make list-targets | sed '/lantiq-xrx200/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
-    - make manifest
+    - for target in $(make list-targets | sed '/lantiq/d'| sed '/brcm2708/d'| sed '/mikrotik/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
+    - make manifest GLUON_AUTOUPDATER_BRANCH=nightly
+    - make manifest GLUON_AUTOUPDATER_BRANCH=experimental
+    - make manifest GLUON_AUTOUPDATER_BRANCH=stable
     - mkdir ~/.ssh
     - chmod 700 ~/.ssh
     - curl -sLO "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer"

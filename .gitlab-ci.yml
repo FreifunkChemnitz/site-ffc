@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2023 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
 ---
 default:
-  image: debian:bookworm-slim
+  image: debian:bullseye-slim
   before_script:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
@@ -38,7 +38,7 @@ build-gluon:
   script:
     - make update
     - export DEFAULT_GLUON_RELEASE="b$(date '+%Y%m%d')"
-    - for target in $(make list-targets | sed '/lantiq/d'| sed '/bcm27xx/d'| sed '/mikrotik/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
+    - for target in $(make list-targets | sed '/bcm27xx/d'| sed '/mikrotik/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
     - make manifest GLUON_AUTOUPDATER_BRANCH=nightly
     - make manifest GLUON_AUTOUPDATER_BRANCH=experimental
     - make manifest GLUON_AUTOUPDATER_BRANCH=stable

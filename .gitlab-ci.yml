@@ -48,5 +48,5 @@ build-gluon:
     - bash installer
     - chmod 400 .secure_files/id_ed25519
     - echo "firmware.chemnitz.freifunk.net ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFMOeOqX/yLkRJgPtoQDMhgNYj9b9EXA/4Hv3omJJmn+1A1k6l9urG4XqvcKd4HS+HBLLqO2VMuiHKPR+zYZkOo=" > ~/.ssh/known_hosts
-    - sftp -4 -i .secure_files/id_ed25519 jenkins@firmware.chemnitz.freifunk.net <<< "mkdir nightly/$(date --iso-8601=date)"
-    - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@firmware.chemnitz.freifunk.net:~/nightly/$(date --iso-8601=date)
+    - sftp -4 -i .secure_files/id_ed25519 jenkins@firmware.chemnitz.freifunk.net <<< "mkdir data/nightly/$(date --iso-8601=date)"
+    - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@firmware.chemnitz.freifunk.net:~/data/nightly/$(date --iso-8601=date)

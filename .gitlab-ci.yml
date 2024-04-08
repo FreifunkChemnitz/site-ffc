@@ -47,6 +47,6 @@ build-gluon:
     - curl -sLO "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer"
     - bash installer
     - chmod 400 .secure_files/id_ed25519
-    - echo "firmware.chemnitz.freifunk.net ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBFMOeOqX/yLkRJgPtoQDMhgNYj9b9EXA/4Hv3omJJmn+1A1k6l9urG4XqvcKd4HS+HBLLqO2VMuiHKPR+zYZkOo=" > ~/.ssh/known_hosts
+    - echo "|1|h4BKShZQ5zziKBq3OkQgjGPeLhA=|cyUpXW9qt/5Aiy9mElTbfJY3RUo= ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG8rpHEH4TedrLZK4tGwQ7l6Nb5Ok5h4yjz1kf14fht1" > ~/.ssh/known_hosts
     - sftp -4 -i .secure_files/id_ed25519 jenkins@firmware.chemnitz.freifunk.net <<< "mkdir data/nightly/$(date --iso-8601=date)"
     - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@firmware.chemnitz.freifunk.net:~/data/nightly/$(date --iso-8601=date)

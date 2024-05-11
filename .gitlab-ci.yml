@@ -7,6 +7,7 @@ default:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
     - apt-get -y install ecdsautils build-essential curl gawk git libncurses-dev lua-check python3 shellcheck time unzip wget rsync subversion qemu-utils zlib1g-dev libssl-dev libelf-dev file
+    - apt-get -y install clang flex bison g++ gcc-multilib g++-multilib gettext libncurses5-dev python3-setuptools swig
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon

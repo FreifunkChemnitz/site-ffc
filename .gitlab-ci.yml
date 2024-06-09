@@ -48,5 +48,5 @@ build-gluon:
     - curl -sLO "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer"
     - bash installer
     - chmod 400 .secure_files/id_ed25519
-    - sftp -4 -i .secure_files/id_ed25519 jenkins@firmware.chemnitz.freifunk.net <<< "mkdir data/nightly/$(date --iso-8601=date)"
+    - sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@firmware.chemnitz.freifunk.net <<< "mkdir data/nightly/$(date --iso-8601=date)"
     - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@firmware.chemnitz.freifunk.net:~/data/nightly/$(date --iso-8601=date)

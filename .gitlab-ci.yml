@@ -11,7 +11,7 @@ default:
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
-    - git checkout 2023.2.4
+    - git checkout v2023.2.4
     - ln -s ../site-ffc site
     - echo -e "\e[0Ksection_end:`date +%s`:preparation\r\e[0K"
 

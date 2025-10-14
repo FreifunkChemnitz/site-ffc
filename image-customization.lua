@@ -92,7 +92,9 @@ local pkgs_pci = {
 }
 
 local pkgs_pci_net = {
-	'kmod-bnx2'
+	'kmod-bnx2',
+	'kmod-phy-broadcom',    -- needed for broadcom nextreme NICs
+	'kmod-phylib-broadcom', -- these are used in HP thin clients
 }
 
 if target('ath79') then

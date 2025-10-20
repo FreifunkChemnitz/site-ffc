@@ -2,7 +2,7 @@
 # SPDX-FileCopyrightText: 2023 Freifunk Chemnitz e.V. <info@chemnitz.freifunk.net>
 ---
 default:
-  image: debian:bullseye-slim
+  image: debian:bookworm
   before_script:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
@@ -24,7 +24,6 @@ workflow:
     - if: '$CI_COMMIT_BRANCH != "$CI_DEFAULT_BRANCH"'
 
 check-siteconf:
-  image: debian:sid
   stage: lint
   script:
     - make lint-lua V=s

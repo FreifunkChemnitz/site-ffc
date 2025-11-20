@@ -19,10 +19,6 @@ stages:
   - lint
   - build
 
-workflow:
-  rules:
-    - if: '$CI_COMMIT_BRANCH != "$CI_DEFAULT_BRANCH"'
-
 check-siteconf:
   stage: lint
   script:
@@ -42,12 +38,15 @@ build-gluon:
     - make manifest GLUON_AUTOUPDATER_BRANCH=nightly
     - make manifest GLUON_AUTOUPDATER_BRANCH=experimental
     - make manifest GLUON_AUTOUPDATER_BRANCH=stable
-    - mkdir ~/.ssh
-    - chmod 700 ~/.ssh
-    - curl -sLO "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer"
-    - bash installer
-    - chmod 400 .secure_files/id_ed25519
-    - sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@builds.chemnitz.freifunk.net <<< "mkdir data"
-    - sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@builds.chemnitz.freifunk.net <<< "mkdir data/nightly"
-    - sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@builds.chemnitz.freifunk.net <<< "mkdir data/nightly/$(date --iso-8601=date)"
-    - scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@builds.chemnitz.freifunk.net:~/data/nightly/$(date --iso-8601=date)
+    - |-
+        if [ $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH ]; then 
+          mkdir ~/.ssh
+          chmod 700 ~/.ssh
+          curl -sLO "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer"
+          bash installer
+          chmod 400 .secure_files/id_ed25519
+          sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@builds.chemnitz.freifunk.net <<< "mkdir data"
+          sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@builds.chemnitz.freifunk.net <<< "mkdir data/nightly"
+          sftp -o StrictHostKeyChecking=accept-new -v -4 -i .secure_files/id_ed25519 jenkins@builds.chemnitz.freifunk.net <<< "mkdir data/nightly/$(date --iso-8601=date)"
+          scp -4 -i .secure_files/id_ed25519 -r output/images/* jenkins@builds.chemnitz.freifunk.net:~/data/nightly/$(date --iso-8601=date)
+        fi

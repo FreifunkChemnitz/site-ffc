@@ -6,12 +6,11 @@ default:
   before_script:
     - echo -e "\e[0Ksection_start:`date +%s`:preparation[collapsed=true]\r\e[0Kprepare build environment"
     - apt-get update
-    - apt-get -y install ecdsautils build-essential curl gawk git libncurses-dev lua-check python3 shellcheck time unzip wget rsync subversion qemu-utils zlib1g-dev libssl-dev libelf-dev file
-    - apt-get -y install clang flex bison g++ gcc-multilib g++-multilib gettext libncurses5-dev python3-setuptools swig
+    - apt-get -y install ecdsautils build-essential curl gawk git libncurses-dev lua-check python3 shellcheck time unzip wget rsync subversion qemu-utils zlib1g-dev libssl-dev libelf-dev file clang python3-dev python3-pyelftools python3-setuptools llvm swig
     - rm -rf ../gluon
     - git clone https://github.com/freifunk-gluon/gluon.git ../gluon
     - cd ../gluon
-    - git checkout v2023.2.5
+    - git checkout v2025.1
     - ln -s ../site-ffc site
     - echo -e "\e[0Ksection_end:`date +%s`:preparation\r\e[0K"
 
@@ -34,7 +33,7 @@ build-gluon:
   script:
     - make update
     - export DEFAULT_GLUON_RELEASE="b$(date '+%Y%m%d')"
-    - for target in $(make list-targets | sed '/bcm27xx/d'| sed '/mikrotik/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
+    - for target in $(make list-targets | sed '/bcm27xx/d'| sed '/mikrotik/d' | sed '/armsr/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
     - make manifest GLUON_AUTOUPDATER_BRANCH=nightly
     - make manifest GLUON_AUTOUPDATER_BRANCH=experimental
     - make manifest GLUON_AUTOUPDATER_BRANCH=stable

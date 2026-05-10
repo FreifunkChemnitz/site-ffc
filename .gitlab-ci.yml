@@ -33,7 +33,7 @@ build-gluon:
   script:
     - make update
     - export DEFAULT_GLUON_RELEASE="b$(date '+%Y%m%d')"
-    - for target in $(make list-targets | sed '/bcm27xx/d'| sed '/mikrotik/d' | sed '/armsr/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
+    - for target in $(make list-targets | sed '/bcm27xx/d'| sed '/mikrotik/d'); do GLUON_TARGET=${target} make -j$(nproc || printf 2); done
     - make manifest GLUON_AUTOUPDATER_BRANCH=nightly
     - make manifest GLUON_AUTOUPDATER_BRANCH=experimental
     - make manifest GLUON_AUTOUPDATER_BRANCH=stable
